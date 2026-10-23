@@ -1,0 +1,17 @@
+{
+  "name": "hevron-site",
+  "description": "Site da Hevron — reforma e construção",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && npx --yes serve dist -l 3000",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "parse5": "^8.0.1",
+    "preact": "^10.29.8",
+    "preact-render-to-string": "^6.8.1"
+  },
+  "private": true,
+  "type": "module"
+}

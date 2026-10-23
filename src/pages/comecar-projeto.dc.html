@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Hevron — Começar meu projeto</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600&amp;family=DM+Serif+Display&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F5F1}
+a{color:#1C1B19}a:hover{color:#A84E28}
+.opt:hover{background:#F7F5F1}
+.lnk:hover{color:#A84E28}
+input:focus,textarea:focus{outline:2px solid #A84E28;outline-offset:1px}
+</style>
+</helmet>
+<div style="font-family: Figtree, sans-serif; color: #1C1B19; background: #F7F5F1; width: 100%; font-size: 17px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column">
+
+<!-- Cabeçalho simples -->
+<header style="position: sticky; top: 0; z-index: 30; background: #FFFFFF; box-shadow: 0 1px 0 #DED8CE, 0 6px 18px rgba(28,27,25,0.06)">
+<div style="padding: 14px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px">
+<a href="Main.dc.html" aria-label="Hevron, página inicial" style="display: flex; align-items: center; text-decoration: none; color: #1C1B19; min-height: 44px">
+<span style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 34px; line-height: 1; letter-spacing: -0.01em"><span style="color: {{accent}}">H</span>evron</span>
+</a>
+<a href="Main.dc.html" class="lnk" style="text-decoration: none; color: #3F3B35; font-weight: 500; font-size: 16px; min-height: 44px; display: inline-flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Voltar ao site</a>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1 1 auto; align-items: stretch">
+
+<!-- Foto lateral -->
+<aside style="flex: 1 1 320px; max-width: 460px; min-height: 280px; position: relative; background: #1C1B19; color: #FFFFFF">
+<img src="{{photo.img}}" alt="{{photo.alt}}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover"></img>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,19,17,0.15) 30%, rgba(20,19,17,0.72) 100%)"></div>
+<div style="position: relative; height: 100%; min-height: 280px; box-sizing: border-box; padding: 40px 36px; display: flex; flex-direction: column; justify-content: flex-end; gap: 14px">
+<p style="position: relative; margin: 0; font-family: 'DM Serif Display', serif; font-size: clamp(30px, 3vw, 42px); line-height: 1.12">{{photo.title}}</p>
+<p style="position: relative; margin: 0; font-size: 17px; color: #EDE9E2">{{photo.text}}</p>
+</div>
+</aside>
+
+<!-- Conteúdo -->
+<main style="flex: 999 1 560px; min-width: 0; padding: 48px 32px 80px; box-sizing: border-box">
+<div style="max-width: 1120px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px 48px; align-items: flex-start">
+
+<!-- Coluna das perguntas -->
+<div style="flex: 999 1 480px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 24px">
+
+<sc-if value="{{showProgress}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-weight: 600; font-size: 17px">{{progressLabel}}</span>
+<div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{progressPct}}" aria-label="Progresso" style="height: 10px; border-radius: 999px; background: #E2DCD2; overflow: hidden; max-width: 340px">
+<div style="{{progressStyle}}"></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showBack}}" hint-placeholder-val="{{ false }}">
+<div><button type="button" onClick="{{goBack}}" class="lnk" style="font: 500 16px Figtree, sans-serif; color: #3F3B35; background: transparent; border: 0; padding: 0; cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Pergunta anterior</button></div>
+</sc-if>
+
+<!-- Uma pergunta por vez -->
+<sc-if value="{{isQuestion}}" hint-placeholder-val="{{ true }}">
+<h1 style="margin: 0; font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 42px); line-height: 1.15">{{q.title}}</h1>
+<div style="background: #FFFFFF; border-radius: 8px; padding: 28px; box-shadow: 0 1px 2px rgba(28,27,25,0.06); display: flex; flex-direction: column; gap: 20px">
+<sc-if value="{{q.info}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; gap: 12px; align-items: flex-start; color: #2F5D50; font-weight: 500; font-size: 17px"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="flex: 0 0 auto; margin-top: 2px"><circle cx="12" cy="12" r="11" fill="#2F5D50"></circle><path d="M12 10.5v6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="7.3" r="1.3" fill="#FFFFFF"></circle></svg><span>{{q.info}}</span></div>
+</sc-if>
+
+<!-- Escolha única -->
+<sc-if value="{{isChoice}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column">
+<sc-for list="{{options}}" as="opt" hint-placeholder-count="4">
+<button type="button" class="opt" onClick="{{opt.pick}}" aria-pressed="{{opt.selected}}" style="{{opt.rowStyle}}"><span aria-hidden="true" style="{{opt.ring}}"><span style="{{opt.dot}}"></span></span><span>{{opt.label}}</span></button>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- CEP -->
+<sc-if value="{{isCep}}" hint-placeholder-val="{{ false }}">
+<form onSubmit="{{submitCep}}" style="display: flex; flex-direction: column; gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 15px">CEP da obra<input type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" value="{{cepInput}}" onInput="{{onCep}}" onChange="{{onCep}}" style="font: 400 18px Figtree, sans-serif; color: #1C1B19; background: #FFFFFF; border: 1px solid #CFC8BC; border-radius: 4px; padding: 14px 16px; min-height: 56px; box-sizing: border-box; width: 100%"></input></label>
+<sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500">{{err}}</span></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center">
+<button type="button" onClick="{{skipCep}}" class="lnk" style="font: 500 16px Figtree, sans-serif; color: #3F3B35; background: transparent; border: 0; padding: 0; cursor: pointer; min-height: 44px; text-decoration: underline">Não sei o CEP</button>
+<button type="button" onClick="{{submitCep}}" style="{{nextBtn}}">Próxima <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+</form>
+</sc-if>
+
+<!-- Área -->
+<sc-if value="{{isArea}}" hint-placeholder-val="{{ false }}">
+<form onSubmit="{{submitArea}}" style="display: flex; flex-direction: column; gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 15px">Área aproximada
+<span style="position: relative; display: block"><input type="text" inputmode="numeric" placeholder="Ex.: 80" value="{{areaInput}}" onInput="{{onArea}}" onChange="{{onArea}}" style="font: 400 18px Figtree, sans-serif; color: #1C1B19; background: #FFFFFF; border: 1px solid #CFC8BC; border-radius: 4px; padding: 14px 64px 14px 16px; min-height: 56px; box-sizing: border-box; width: 100%"></input><span aria-hidden="true" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-weight: 600; color: #5A564F">m²</span></span></label>
+<sc-if value="{{err}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500">{{err}}</span></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center">
+<button type="button" onClick="{{skipArea}}" class="lnk" style="font: 500 16px Figtree, sans-serif; color: #3F3B35; background: transparent; border: 0; padding: 0; cursor: pointer; min-height: 44px; text-decoration: underline">Não sei a área</button>
+<button type="button" onClick="{{submitArea}}" style="{{nextBtn}}">Próxima <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+</form>
+</sc-if>
+
+<!-- Descrição -->
+<sc-if value="{{isText}}" hint-placeholder-val="{{ false }}">
+<form onSubmit="{{submitText}}" style="display: flex; flex-direction: column; gap: 10px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 15px">Descreva o seu projeto<textarea rows="6" placeholder="Ex.: quero trocar o piso da sala, abrir a cozinha e reformar o banheiro social." value="{{descInput}}" onInput="{{onDesc}}" onChange="{{onDesc}}" style="font: 400 17px Figtree, sans-serif; color: #1C1B19; background: #FFFFFF; border: 1px solid #CFC8BC; border-radius: 4px; padding: 14px 16px; box-sizing: border-box; width: 100%; resize: vertical"></textarea></label>
+<span style="font-size: 14px; color: #5A564F">Opcional</span>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; align-items: center; margin-top: 8px">
+<button type="button" onClick="{{skipText}}" style="font: 600 17px Figtree, sans-serif; padding: 14px 24px; min-height: 52px; border: 1px solid #1C1B19; border-radius: 4px; background: transparent; color: #1C1B19; cursor: pointer">Pular</button>
+<button type="button" onClick="{{submitText}}" style="{{nextBtn}}">Próxima <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+</form>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- Cadastro -->
+<sc-if value="{{isForm}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 42px); line-height: 1.15">Quase pronto! Como falamos com você?</h1>
+<p style="margin: 0; font-size: 18px; color: #3F3B35">Com esses dados, um coordenador da Hevron entra em contato para conversar sobre a sua obra.</p>
+</div>
+<form onSubmit="{{submitForm}}" style="background: #FFFFFF; border-radius: 8px; padding: 28px; box-shadow: 0 1px 2px rgba(28,27,25,0.06); display: flex; flex-direction: column; gap: 18px">
+<p style="margin: 0; font-size: 15px; color: #5A564F">Seus dados pessoais serão usados apenas para atender o seu pedido, de acordo com a LGPD.</p>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 15px">Nome completo<input type="text" name="nome" autocomplete="name" value="{{nome}}" onInput="{{onNome}}" onChange="{{onNome}}" style="font: 400 17px Figtree, sans-serif; color: #1C1B19; background: #FFFFFF; border: 1px solid #CFC8BC; border-radius: 4px; padding: 14px 16px; min-height: 52px; box-sizing: border-box; width: 100%"></input></label>
+<sc-if value="{{fe.nome}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500; margin-top: -10px">{{fe.nome}}</span></sc-if>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 15px">E-mail<input type="email" name="email" autocomplete="email" value="{{email}}" onInput="{{onEmail}}" onChange="{{onEmail}}" style="font: 400 17px Figtree, sans-serif; color: #1C1B19; background: #FFFFFF; border: 1px solid #CFC8BC; border-radius: 4px; padding: 14px 16px; min-height: 52px; box-sizing: border-box; width: 100%"></input></label>
+<sc-if value="{{fe.email}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500; margin-top: -10px">{{fe.email}}</span></sc-if>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500; font-size: 15px">Celular (WhatsApp)<input type="tel" name="celular" autocomplete="tel-national" inputmode="numeric" placeholder="(00) 00000-0000" value="{{cel}}" onInput="{{onCel}}" onChange="{{onCel}}" style="font: 400 17px Figtree, sans-serif; color: #1C1B19; background: #FFFFFF; border: 1px solid #CFC8BC; border-radius: 4px; padding: 14px 16px; min-height: 52px; box-sizing: border-box; width: 100%"></input></label>
+<sc-if value="{{fe.cel}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500; margin-top: -10px">{{fe.cel}}</span></sc-if>
+<label style="display: flex; gap: 12px; align-items: flex-start; font-size: 16px; cursor: pointer; min-height: 44px"><input type="checkbox" checked="{{dicas}}" onChange="{{onDicas}}" style="width: 22px; height: 22px; margin: 2px 0 0; flex: 0 0 auto; accent-color: #A84E28"></input><span>Quero receber por e-mail dicas e novidades sobre a minha obra.</span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; font-size: 16px; cursor: pointer; min-height: 44px"><input type="checkbox" checked="{{aceite}}" onChange="{{onAceite}}" style="width: 22px; height: 22px; margin: 2px 0 0; flex: 0 0 auto; accent-color: #A84E28"></input><span>Li e aceito a <a href="/politica-de-privacidade" target="_blank" style="color: #1C1B19">Política de privacidade</a>.</span></label>
+<sc-if value="{{fe.aceite}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500; margin-top: -10px">{{fe.aceite}}</span></sc-if>
+<input type="text" id="hp" name="site" tabindex="-1" autocomplete="off" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0">
+<sc-if value="{{sendErr}}" hint-placeholder-val="{{ false }}"><span role="alert" style="color: #A3321C; font-size: 15px; font-weight: 500">{{sendErr}}</span></sc-if>
+<div style="display: flex; justify-content: flex-end; margin-top: 4px"><button type="button" onClick="{{submitForm}}" style="{{nextBtn}}">{{sendLabel}} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></div>
+</form>
+</sc-if>
+
+<!-- Confirmação -->
+<sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="background: #FFFFFF; border-radius: 8px; padding: 40px 32px; box-shadow: 0 1px 2px rgba(28,27,25,0.06); display: flex; flex-direction: column; gap: 16px; align-items: flex-start">
+<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#2F5D50" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M7.5 12.5l3 3 6-6.5"></path></svg>
+<h1 style="margin: 0; font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 42px); line-height: 1.15">{{doneTitle}}</h1>
+<p style="margin: 0; font-size: 18px; color: #3F3B35">{{doneText}}</p>
+<p style="margin: 0; font-size: 16px; color: #5A564F">Enquanto isso, conheça como trabalhamos em cada etapa da obra.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px">
+<a href="como-funciona.dc.html" style="text-decoration: none; font-weight: 600; font-size: 17px; padding: 14px 26px; min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center; background: {{accent}}; color: #FFFFFF; border-radius: 4px">Ver como funciona</a>
+<a href="Main.dc.html" style="text-decoration: none; font-weight: 600; font-size: 17px; padding: 14px 26px; min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center; border: 1px solid #1C1B19; color: #1C1B19; border-radius: 4px">Voltar ao início</a>
+</div>
+</div>
+</sc-if>
+
+<!-- Garantias -->
+<sc-if value="{{showPillars}}" hint-placeholder-val="{{ true }}">
+<div style="background: #FFFFFF; border-radius: 8px; padding: 24px; box-shadow: 0 1px 2px rgba(28,27,25,0.06); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; text-align: center">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A84E28" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M10 17h6"></path></svg><span style="font-weight: 600; font-size: 15px; line-height: 1.35">Orçamento transparente</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A84E28" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path></svg><span style="font-weight: 600; font-size: 15px; line-height: 1.35">Prazos cumpridos</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#A84E28" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M9 14.5L8 22l4-2 4 2-1-7.5"></path></svg><span style="font-weight: 600; font-size: 15px; line-height: 1.35">Qualidade garantida</span></div>
+</div>
+<p style="margin: 0; font-size: 14px; color: #5A564F">As respostas servem para entendermos o seu projeto e não são um orçamento. O valor final é definido depois da visita técnica e do projeto detalhado.</p>
+</sc-if>
+</div>
+
+<!-- Painel "Seu projeto" -->
+<sc-if value="{{showPanel}}" hint-placeholder-val="{{ true }}">
+<aside aria-label="Resumo do seu projeto" style="flex: 1 1 280px; max-width: 420px; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 104px">
+<h2 style="margin: 0; font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 32px; line-height: 1.15">Seu projeto</h2>
+<div style="background: #FFFFFF; border-radius: 8px; padding: 12px 24px; box-shadow: 0 1px 2px rgba(28,27,25,0.06)">
+<sc-if value="{{noAnswers}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 12px 0; color: #5A564F; font-size: 16px">Suas respostas aparecem aqui conforme você avança.</p>
+</sc-if>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{summary}}" as="it" hint-placeholder-count="3">
+<li style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A84E28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; margin-top: 1px"><circle cx="12" cy="12" r="9.5"></circle><path d="M7.5 12.5l3 3 6-6.5"></path></svg><span style="flex: 1 1 auto; min-width: 0; font-size: 16px; overflow-wrap: anywhere">{{it.label}}</span><sc-if value="{{it.canEdit}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{it.edit}}" aria-label="{{it.editLabel}}" class="lnk" style="font: 500 14px Figtree, sans-serif; color: #5A564F; background: transparent; border: 0; padding: 0 0 0 8px; cursor: pointer; min-height: 32px; text-decoration: underline; flex: 0 0 auto">Alterar</button></sc-if></li>
+</sc-for>
+</ul>
+</div>
+</aside>
+</sc-if>
+
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#A84E28","options":["#A84E28","#2F5D50","#1F4E79","#8A6A2F"]},"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+questions(a) {
+const now = new Date();
+const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const mes = (n) => { const d = new Date(now.getFullYear(), now.getMonth() + n, 1); return meses[d.getMonth()] + ' de ' + d.getFullYear(); };
+const construir = a.obj === 'Construir do zero';
+const tiposReforma = ['Reforma completa', 'Reforma parcial (alguns ambientes)', 'Cozinha', 'Banheiro', 'Áreas externas', 'Pisos', 'Pintura e revestimentos', 'Elétrica e hidráulica', 'Eficiência energética', 'Mármore'];
+const tiposConstrucao = ['Casa térrea', 'Sobrado', 'Casa de alto padrão', 'Ampliação', 'Área de lazer e piscina', 'Imóvel comercial'];
+const tiposAmbos = ['Reforma completa', 'Reforma parcial (alguns ambientes)', 'Construção de casa', 'Ampliação', 'Área de lazer e piscina', 'Ainda estou decidindo'];
+return [
+{ id: 'obj', kind: 'choice', title: 'O que você quer fazer?', info: 'Escolha a opção que mais combina com o seu projeto.', options: ['Reformar um imóvel', 'Construir do zero', 'Ainda não sei'] },
+{ id: 'cep', kind: 'cep', title: 'Qual é o CEP da obra?', info: 'O CEP nos ajuda a estimar o valor da obra e a escolher profissionais perto de você.' },
+{ id: 'tipo', kind: 'choice', title: 'Que tipo de projeto você quer fazer?', info: 'Selecione a opção que melhor descreve o seu projeto.', options: construir ? tiposConstrucao : (a.obj === 'Reformar um imóvel' ? tiposReforma : tiposAmbos) },
+construir
+? { id: 'imovel', kind: 'choice', title: 'Você já tem o terreno?', info: '', options: ['Sim, já tenho o terreno', 'Estou negociando um terreno', 'Ainda não tenho terreno'] }
+: { id: 'imovel', kind: 'choice', title: 'Qual é o imóvel da obra?', info: '', options: ['Casa', 'Apartamento', 'Sobrado', 'Imóvel comercial', 'Outro'] },
+{ id: 'area', kind: 'area', title: construir ? 'Quantos metros quadrados você quer construir?' : 'Qual é a área da reforma?', info: construir ? 'Uma estimativa já ajuda. Se não souber, o coordenador calcula com você.' : 'Informe a área total dos ambientes que vão passar pela obra. Um valor aproximado já ajuda.' },
+{ id: 'situacao', kind: 'choice', title: 'Qual é a sua relação com o imóvel?', info: '', options: ['Sou o proprietário', 'Estou comprando', 'Sou inquilino', 'Cuido da obra para outra pessoa ou empresa'] },
+{ id: 'planta', kind: 'choice', title: 'Você já tem um projeto ou planta?', info: 'Se ainda não tiver, tudo bem: a Hevron também cuida do projeto.', options: ['Sim, tenho o projeto completo', 'Tenho só algumas ideias e referências', 'Não, preciso de um projeto'] },
+{ id: 'quando', kind: 'choice', title: 'Quando você quer começar a obra?', info: 'A data de início pode influenciar o custo e a disponibilidade das equipes.', options: ['Antes de ' + mes(3), 'Entre ' + mes(3) + ' e ' + mes(6), 'Depois de ' + mes(6), 'Ainda não tenho data'] },
+{ id: 'orcamento', kind: 'choice', title: 'Quanto você pretende investir?', info: 'Considere mão de obra e materiais. O coordenador ajuda a ajustar esse valor com você.', options: ['Até R$ 30 mil', 'De R$ 30 mil a R$ 80 mil', 'De R$ 80 mil a R$ 150 mil', 'De R$ 150 mil a R$ 300 mil', 'De R$ 300 mil a R$ 600 mil', 'Mais de R$ 600 mil', 'Ainda não sei'] },
+{ id: 'descricao', kind: 'text', title: 'Quer contar mais detalhes sobre o projeto?', info: 'Por favor, não coloque seus dados de contato aqui. Eles serão pedidos na próxima etapa.' }
+];
+}
+field(e, sel, fallback) {
+const t = e && (e.currentTarget || e.target);
+const f = t && t.closest ? (t.closest('form') || t) : t;
+const el = f && f.querySelector ? f.querySelector(sel) : null;
+return el ? String(el.value || '') : String(fallback || '');
+}
+answer(id, val) {
+const st = this.state || {};
+const a = Object.assign({}, st.ans || {});
+if (id === 'obj' && a.obj !== val) { delete a.tipo; delete a.imovel; }
+a[id] = val;
+const qs = this.questions(a);
+let next = qs.findIndex((q) => !(q.id in a));
+if (next < 0) next = qs.length;
+this.setState({ ans: a, step: next, err: '' });
+}
+renderVals() {
+const st = this.state || {};
+const a = st.ans || {};
+const accent = this.props.accent ?? '#A84E28';
+const qs = this.questions(a);
+const total = qs.length;
+const step = st.step || 0;
+const isForm = step === total;
+const isDone = step > total;
+const isQuestion = step < total;
+const q = qs[Math.min(step, total - 1)];
+const fe = st.fe || {};
+const photos = [
+{ img: '/_blob/5ffc297b3b015d2d44a5302ea27a041b', alt: 'Sala de estar reformada com sofá em L, mesa de centro em madeira e janela ampla', title: 'Do projeto à entrega das chaves.', text: 'Um coordenador cuida da sua obra em cada etapa.' },
+{ img: '/_blob/0e5b7ec011df56944b8cbfc5439e5f4b', alt: 'Cozinha reformada com ilha em mármore e banquetas pretas', title: 'Orçamento transparente.', text: 'Você sabe quanto vai pagar em cada etapa, sem custos escondidos.' },
+{ img: '/_blob/4052e8f1b87207cf53ea8cafcb9227a5', alt: 'Sala de estar reformada em tons de cinza, com dois sofás, tapete branco e estante preta', title: 'Prazos cumpridos.', text: 'Um cronograma claro desde o primeiro dia.' },
+{ img: '/_blob/46da60a87711d6e2b99c2263d9b12244', alt: 'Casa térrea em construção, com telhado pronto e paredes rebocadas', title: 'Qualidade garantida.', text: 'Profissionais selecionados e vistoria a cada etapa.' }
+];
+const photo = photos[Math.floor(Math.min(step, total) / 3) % photos.length];
+const sel = a[q.id];
+const options = (q.options || []).map((label, i, arr) => {
+const selected = sel === label;
+return {
+label: label,
+selected: selected,
+pick: () => this.answer(q.id, label),
+rowStyle: 'width: 100%; min-height: 64px; padding: 16px 12px; background: transparent; border: 0; ' + (i < arr.length - 1 ? 'border-bottom: 1px solid #E2DCD2; ' : '') + 'display: flex; gap: 16px; align-items: center; text-align: left; cursor: pointer; font: 400 18px/1.4 Figtree, sans-serif; color: #1C1B19; border-radius: 4px',
+ring: 'flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; border: ' + (selected ? '2px solid ' + accent : '1.5px solid #8C867C'),
+dot: selected ? 'width: 12px; height: 12px; border-radius: 50%; background: ' + accent : 'display: none'
+};
+});
+const summary = qs.filter((x) => (x.id in a) && a[x.id] !== '').map((x) => {
+const idx = qs.indexOf(x);
+let label = a[x.id];
+if (x.id === 'descricao') label = '“' + (label.length > 70 ? label.slice(0, 70).trim() + '…' : label) + '”';
+return { label: label, canEdit: !isDone, editLabel: 'Alterar: ' + x.title, edit: () => this.setState({ step: idx, err: '' }) };
+});
+const pct = isQuestion ? Math.round(((step + 1) / total) * 100) : 100;
+const nome = st.nome || '';
+const primeiro = nome.trim().split(/\s+/)[0] || '';
+return {
+accent: accent,
+photo: photo,
+q: q,
+options: options,
+isQuestion: isQuestion,
+isChoice: isQuestion && q.kind === 'choice',
+isCep: isQuestion && q.kind === 'cep',
+isArea: isQuestion && q.kind === 'area',
+isText: isQuestion && q.kind === 'text',
+isForm: isForm,
+isDone: isDone,
+showProgress: !isDone,
+showBack: step > 0 && !isDone,
+showPillars: !isDone,
+showPanel: true,
+progressLabel: isQuestion ? 'Pergunta ' + (step + 1) + ' de ' + total : 'Última etapa',
+progressPct: pct,
+progressStyle: 'height: 100%; border-radius: 999px; background: ' + accent + '; transition: width .3s ease; width: ' + pct + '%',
+goBack: () => this.setState({ step: Math.max(0, step - 1), err: '' }),
+nextBtn: 'font: 600 17px Figtree, sans-serif; padding: 14px 26px; min-height: 52px; border: 0; border-radius: 4px; background: ' + accent + '; color: #FFFFFF; cursor: pointer; display: inline-flex; align-items: center; gap: 10px',
+err: st.err || '',
+summary: summary,
+noAnswers: summary.length === 0,
+cepInput: st.cepInput || '',
+onCep: (e) => { const d = String(e.target.value).replace(/\D/g, '').slice(0, 8); this.setState({ cepInput: d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d, err: '' }); },
+submitCep: (e) => { if (e && e.preventDefault) e.preventDefault(); const d = this.field(e, 'input', st.cepInput).replace(/\D/g, '').slice(0, 8); if (d.length !== 8) { this.setState({ err: 'Digite os 8 números do CEP.' }); return; } const cep = d.slice(0, 5) + '-' + d.slice(5); this.setState({ cepInput: cep }); this.answer('cep', 'CEP ' + cep); },
+skipCep: () => this.answer('cep', 'CEP não informado'),
+areaInput: st.areaInput || '',
+onArea: (e) => this.setState({ areaInput: String(e.target.value).replace(/\D/g, '').slice(0, 6), err: '' }),
+submitArea: (e) => { if (e && e.preventDefault) e.preventDefault(); const raw = this.field(e, 'input', st.areaInput).replace(/\D/g, '').slice(0, 6); const n = parseInt(raw || '0', 10); this.setState({ areaInput: raw }); if (!n) { this.setState({ err: 'Informe a área em metros quadrados.' }); return; } this.answer('area', n.toLocaleString('pt-BR') + ' m²'); },
+skipArea: () => this.answer('area', 'Área não informada'),
+descInput: st.descInput || '',
+onDesc: (e) => this.setState({ descInput: String(e.target.value).slice(0, 1500) }),
+submitText: (e) => { if (e && e.preventDefault) e.preventDefault(); const t = this.field(e, 'textarea', st.descInput).slice(0, 1500); this.setState({ descInput: t }); this.answer('descricao', t.trim()); },
+skipText: () => this.answer('descricao', ''),
+nome: nome,
+email: st.email || '',
+cel: st.cel || '',
+dicas: !!st.dicas,
+aceite: !!st.aceite,
+fe: fe,
+onNome: (e) => this.setState({ nome: e.target.value, fe: Object.assign({}, fe, { nome: '' }) }),
+onEmail: (e) => this.setState({ email: e.target.value, fe: Object.assign({}, fe, { email: '' }) }),
+onCel: (e) => { const d = String(e.target.value).replace(/\D/g, '').slice(0, 11); let v = d; if (d.length > 2) v = '(' + d.slice(0, 2) + ') ' + d.slice(2); if (d.length > 7) v = '(' + d.slice(0, 2) + ') ' + d.slice(2, d.length - 4) + '-' + d.slice(d.length - 4); this.setState({ cel: v, fe: Object.assign({}, fe, { cel: '' }) }); },
+onDicas: (e) => this.setState({ dicas: !!e.target.checked }),
+onAceite: (e) => this.setState({ aceite: !!e.target.checked, fe: Object.assign({}, fe, { aceite: '' }) }),
+submitForm: (e) => {
+if (e && e.preventDefault) e.preventDefault();
+const vNome = this.field(e, 'input[name=nome]', st.nome);
+const vEmail = this.field(e, 'input[name=email]', st.email);
+const vCel = this.field(e, 'input[name=celular]', st.cel);
+const errs = {};
+if (vNome.trim().length < 3) errs.nome = 'Informe o seu nome.';
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(vEmail.trim())) errs.email = 'Informe um e-mail válido.';
+const cd = vCel.replace(/\D/g, '');
+if (cd.length < 10) errs.cel = 'Informe o celular com DDD.';
+if (!st.aceite) errs.aceite = 'Para continuar, aceite a Política de privacidade.';
+if (Object.keys(errs).length) { this.setState({ fe: errs }); return; }
+if (st.enviando) return;
+this.setState({ enviando: true, sendErr: '', fe: {}, nome: vNome, email: vEmail, cel: vCel });
+const respostas = {};
+qs.forEach((x) => { if (x.id in a) respostas[x.title] = a[x.id]; });
+fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tipo: 'projeto', nome: vNome.trim(), email: vEmail.trim(), telefone: vCel, dicas: !!st.dicas, aceite: true, respostas: respostas, site: document.getElementById('hp') ? document.getElementById('hp').value : '' }) })
+.then((r) => { if (!r.ok) throw new Error('falha'); this.setState({ step: total + 1, enviando: false }); })
+.catch(() => this.setState({ enviando: false, sendErr: 'Não conseguimos enviar agora. Tente de novo em instantes ou fale com a gente pelo WhatsApp (43) 98871-2083.' }));
+},
+sendErr: st.sendErr || '',
+sendLabel: st.enviando ? 'Enviando…' : 'Enviar meu projeto',
+doneTitle: primeiro ? 'Recebemos o seu projeto, ' + primeiro + '!' : 'Recebemos o seu projeto!',
+doneText: 'Um coordenador da Hevron vai entrar em contato pelo celular ' + (st.cel || '') + ' para conversar sobre a sua obra e agendar a visita técnica.'
+};
+}
+}
+</script>
+</body>
+</html>

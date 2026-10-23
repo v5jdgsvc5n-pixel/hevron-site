@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Hevron — Projetos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600&amp;family=DM+Serif+Display&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F7F5F1}
+a{color:#1C1B19}a:hover{color:#A84E28}
+.ph{background-color:#D9D3C9;background-image:repeating-linear-gradient(135deg,rgba(28,27,25,.06) 0 12px,transparent 12px 24px);display:flex;align-items:flex-end;justify-content:flex-start;color:#3F3B35;font:500 13px/1.3 Figtree,sans-serif;letter-spacing:.02em}
+.ph-dark{background-color:#3A3733;background-image:repeating-linear-gradient(135deg,rgba(237,233,226,.06) 0 12px,transparent 12px 24px);color:#B8B2A8}
+</style>
+</helmet>
+<div style="font-family: Figtree, sans-serif; color: #1C1B19; background: #F7F5F1; width: 100%; font-size: 17px; line-height: 1.6; position: relative">
+
+<!-- Cabeçalho fixo (acompanha a rolagem) -->
+<header style="{{headerStyle}}">
+<div style="max-width: 1320px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; position: relative">
+<a href="Main.dc.html" aria-label="Hevron, página inicial" style="display: flex; align-items: center; text-decoration: none; color: {{navColor}}; min-height: 44px">
+<span style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 34px; line-height: 1; letter-spacing: -0.01em"><span style="color: #D98A63">H</span>evron</span>
+</a>
+<nav aria-label="Menu principal" style="display: flex; flex-wrap: wrap; gap: 8px 28px; flex: 1 1 420px; justify-content: center; font-weight: 500; font-size: 17px">
+<button type="button" onClick="{{toggleMenu}}" aria-expanded="{{menuOpen}}" style="font: 500 17px Figtree, sans-serif; padding: 0; background: transparent; border: 0; cursor: pointer; color: {{menuColor}}; display: inline-flex; align-items: center; gap: 6px; min-height: 44px">Reformar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="{{menuChevron}}"><path d="M6 9l6 6 6-6"></path></svg></button>
+<button type="button" onClick="{{toggleBuild}}" aria-expanded="{{buildOpen}}" style="font: 500 17px Figtree, sans-serif; padding: 0; background: transparent; border: 0; cursor: pointer; color: {{buildColor}}; display: inline-flex; align-items: center; gap: 6px; min-height: 44px">Construir <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="{{buildChevron}}"><path d="M6 9l6 6 6-6"></path></svg></button>
+<a href="projetos.dc.html" aria-current="page" style="text-decoration: none; color: {{navColor}}; box-shadow: inset 0 -2px 0 #D98A63; display: inline-flex; align-items: center; gap: 6px; min-height: 44px">Projetos <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+<a href="como-funciona.dc.html" style="text-decoration: none; color: {{navColor}}; display: inline-flex; align-items: center; gap: 6px; min-height: 44px">Como funciona <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+<a href="sobre-nos.dc.html" style="text-decoration: none; color: {{navColor}}; display: inline-flex; align-items: center; gap: 6px; min-height: 44px">Sobre nós <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<button type="button" onClick="{{togglePartner}}" aria-expanded="{{partnerOpen}}" style="font: 500 16px Figtree, sans-serif; padding: 12px 20px; min-height: 48px; display: inline-flex; align-items: center; gap: 10px; background: {{partnerBg}}; color: #1C1B19; border: 0; border-radius: 4px; cursor: pointer">Seja parceiro <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="{{chevronStyle}}"><path d="M6 9l6 6 6-6"></path></svg></button>
+<a href="comecar-projeto.dc.html" style="text-decoration: none; font-weight: 600; font-size: 16px; padding: 12px 22px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; background: {{accent}}; color: #FFFFFF; border-radius: 4px">Começar meu projeto</a>
+</div>
+
+<!-- Menu suspenso "Reformar" -->
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 84px; left: 24px; right: 24px; background: #FFFFFF; color: #1C1B19; border-radius: 0 0 8px 8px; padding: 36px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 32px 72px; box-shadow: 0 16px 40px rgba(28,27,25,0.18)">
+<div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1B19" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="14" height="5" rx="1"></rect><path d="M18 5.5h2v5h-8v3"></path><rect x="10.5" y="13.5" width="3" height="7" rx="1"></rect></svg><span style="font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1.2">Por ambiente</span></div>
+<a href="reforma-casa.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Reforma de casa</a>
+<a href="reforma-apartamento.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Reforma de apartamento</a>
+<a href="reforma-cozinha.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Reforma de cozinha</a>
+<a href="reforma-banheiro.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Reforma de banheiro</a>
+<a href="reforma-areas-externas.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Áreas externas</a>
+</div>
+<div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1B19" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2 2 0 0 1-3-3l7.5-7.5"></path><path d="M14.5 6.5L17 4l3 3-2.5 2.5"></path></svg><span style="font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1.2">Por serviço</span></div>
+<a href="reforma-pisos.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Pisos</a>
+<a href="reforma-pintura.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Pintura e revestimentos</a>
+<a href="reforma-eletrica-hidraulica.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Elétrica e hidráulica</a>
+<a href="reforma-eficiencia-energetica.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Eficiência energética</a>
+<a href="reforma-marmore.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Mármore</a>
+</div>
+<div style="flex: 1 1 280px; background: #EDE9E2; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.25">Não sabe por onde começar?</span>
+<span style="color: #5A564F; font-size: 16px">Conte o que você quer mudar e um coordenador ajuda a definir o tipo de reforma ideal para o seu imóvel.</span>
+<a href="comecar-projeto.dc.html" style="font-weight: 600; color: {{accent}}; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center">Começar meu projeto →</a>
+</div>
+</div>
+</sc-if>
+
+<!-- Menu suspenso "Construir" -->
+<sc-if value="{{buildOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 84px; left: 24px; right: 24px; background: #FFFFFF; color: #1C1B19; border-radius: 0 0 8px 8px; padding: 36px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 32px 72px; box-shadow: 0 16px 40px rgba(28,27,25,0.18)">
+<div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1B19" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M10 20v-5h4v5"></path></svg><span style="font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1.2">Residencial</span></div>
+<a href="construir-casa-terrea.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Casa térrea</a>
+<a href="construir-sobrado.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Sobrado</a>
+<a href="construir-alto-padrao.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Casa de alto padrão</a>
+</div>
+<div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1B19" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"></rect><path d="M3 9h18M9 20V9"></path></svg><span style="font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1.2">Projetos especiais</span></div>
+<a href="construir-ampliacao.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Ampliação</a>
+<a href="construir-area-lazer.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Área de lazer e piscina</a>
+<a href="construir-comercial.dc.html" style="text-decoration: none; color: #3F3B35; font-weight: 400; font-size: 17px; min-height: 44px; display: inline-flex; align-items: center">Imóvel comercial</a>
+</div>
+<div style="flex: 1 1 280px; background: #EDE9E2; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.25">Tem um terreno e um sonho?</span>
+<span style="color: #5A564F; font-size: 16px">Conte o que você quer construir e um coordenador ajuda a planejar o orçamento e as etapas da obra.</span>
+<a href="comecar-projeto.dc.html" style="font-weight: 600; color: {{accent}}; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center">Começar meu projeto →</a>
+</div>
+</div>
+</sc-if>
+
+<!-- Menu "Seja parceiro" -->
+<sc-if value="{{partnerOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 88px; right: 24px; left: 24px; max-width: 460px; margin-left: auto; background: #FFFFFF; color: #1C1B19; border-radius: 8px; padding: 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 20px; box-shadow: 0 12px 36px rgba(28,27,25,0.22)">
+<div style="flex: 1 1 280px; border: 1px solid #DED8CE; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 24px">Rede de profissionais</h3>
+<p style="margin: 0; color: #5A564F; font-size: 16px; flex-grow: 1">Entre para uma rede de especialistas e receba obras na sua região com pagamento garantido.</p>
+<a href="rede-parceiros.dc.html" style="font-weight: 600; color: {{accent}}; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center">Entrar para a rede</a>
+</div>
+</div>
+</sc-if>
+</div>
+</header>
+
+<!-- Topo -->
+<section ref="{{heroRef}}" style="position: relative; min-height: 600px; display: flex; align-items: flex-end; color: #FFFFFF; background: #3A3733">
+<img src="/_blob/cf53134eee7524e2c399b1b7911661f1" alt="Cozinha clara com armários planejados, ilha com banqueta e janela ampla para o jardim" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 50%">
+<div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(20,19,17,0.55)"></div>
+<div style="position: relative; max-width: 1240px; width: 100%; margin: 0 auto; padding: 170px 24px 80px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+<nav aria-label="Você está em" style="font-size: 15px; color: #EDE9E2; display: flex; flex-wrap: wrap; gap: 8px; align-items: center"><a href="Main.dc.html" style="color: #EDE9E2">Início</a><span aria-hidden="true">/</span><span>Projetos</span></nav>
+<h1 style="margin: 0; max-width: 900px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(40px, 5.6vw, 72px); line-height: 1.03; letter-spacing: -0.03em">Projetos para inspirar a sua obra</h1>
+<p style="margin: 0; font-size: 20px; color: #EDE9E2; max-width: 660px">Cozinhas, banheiros, salas, mármore e casas inteiras. Veja ideias de acabamento e imagine o que podemos fazer pela sua casa.</p>
+</div>
+</section>
+
+<!-- Galeria -->
+<section>
+<div style="max-width: 1240px; margin: 0 auto; padding: 80px 24px 96px; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-wrap: wrap; gap: 24px 64px; align-items: flex-end">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.08; letter-spacing: -0.02em; flex: 1 1 520px">Escolha um ambiente</h2>
+<p style="margin: 0; flex: 1 1 380px; color: #5A564F">Filtre por tipo de projeto e encontre referências para conversar com o seu coordenador.</p>
+</div>
+<div role="group" aria-label="Filtrar projetos" style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{filters}}" as="item" hint-placeholder-count="7">
+<button type="button" onClick="{{item.pick}}" aria-pressed="{{item.active}}" style="{{item.style}}">{{item.label}}</button>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 28px 24px">
+<sc-for list="{{projects}}" as="item" hint-placeholder-count="6">
+<article style="display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; background: #D9D3C9">
+<img src="{{item.img}}" alt="{{item.alt}}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<span style="position: absolute; top: 14px; left: 14px; background: #FFFFFF; color: #1C1B19; border-radius: 999px; padding: 5px 12px; font-size: 14px; font-weight: 600">{{item.cat}}</span>
+</div>
+<h3 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">{{item.title}}</h3>
+<p style="margin: 0; color: #5A564F; font-size: 16px">{{item.desc}}</p>
+</article>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- Como nascem os projetos -->
+<section style="background: #EDE9E2">
+<div style="max-width: 1240px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; gap: 40px 72px; align-items: flex-start">
+<div style="flex: 1 1 380px; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.08; letter-spacing: -0.02em">Cada projeto começa com você</h2>
+<p style="margin: 0; color: #3F3B35">Nenhuma obra é igual a outra. Partimos da sua rotina, do seu gosto e do seu orçamento para desenhar a solução certa.</p>
+<div><a href="como-funciona.dc.html" style="text-decoration: none; font-weight: 600; padding: 14px 24px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; background: {{accent}}; color: #FFFFFF; border-radius: 4px">Ver como funciona</a></div>
+</div>
+<div style="flex: 1 1 520px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px">
+<div style="background: #FFFFFF; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'DM Serif Display', serif; font-size: 30px; line-height: 1; color: {{accent}}">1</span><span style="font-weight: 600; font-size: 18px">Projeto sob medida</span><span style="color: #5A564F; font-size: 15px">Plantas e imagens para você ver o resultado antes da obra começar.</span></div>
+<div style="background: #FFFFFF; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'DM Serif Display', serif; font-size: 30px; line-height: 1; color: {{accent}}">2</span><span style="font-weight: 600; font-size: 18px">Materiais escolhidos juntos</span><span style="color: #5A564F; font-size: 15px">Mostramos amostras de pedras, pisos e revestimentos e explicamos cada diferença.</span></div>
+<div style="background: #FFFFFF; border-radius: 6px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'DM Serif Display', serif; font-size: 30px; line-height: 1; color: {{accent}}">3</span><span style="font-weight: 600; font-size: 18px">Execução acompanhada</span><span style="color: #5A564F; font-size: 15px">Um coordenador garante que o que foi desenhado é o que vai ser entregue.</span></div>
+</div>
+</div>
+</section>
+
+<!-- Chamada final -->
+<section style="background: #2F5D50; color: #FFFFFF">
+<div style="max-width: 1240px; margin: 0 auto; padding: 80px 24px; display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; justify-content: space-between">
+<div style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em">O próximo projeto pode ser o seu</h2>
+<p style="margin: 0; color: #E3ECE8; font-size: 18px">Conte o que você imagina para a sua casa e agende a visita técnica gratuita. E para cada obra pronta, plantamos duas árvores.</p>
+</div>
+<a href="comecar-projeto.dc.html" style="text-decoration: none; font-weight: 600; font-size: 18px; padding: 18px 32px; min-height: 56px; box-sizing: border-box; display: inline-flex; align-items: center; background: #FFFFFF; color: #1C1B19; border-radius: 4px">Começar meu projeto</a>
+</div>
+</section>
+
+<!-- Rodapé -->
+<footer style="background: #1C1B19; color: #B8B2A8; font-size: 15px">
+<div style="max-width: 1240px; margin: 0 auto; padding: 64px 24px 32px; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center">
+<span style="font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(56px, 7vw, 84px); line-height: 1; color: #FFFFFF; letter-spacing: -0.01em"><span style="color: #D98A63">H</span>evron</span>
+<p style="margin: 0; max-width: 1000px; font-size: 19px; line-height: 1.6; font-style: italic; color: #EDE9E2">A Hevron cria um novo padrão de confiança e qualidade para acompanhar, proteger e simplificar a sua obra. Unimos o melhor das pessoas e da tecnologia: profissionais rigorosamente selecionados, garantias para proteger o seu projeto e uma área do cliente para acompanhar cada etapa, do início ao fim.</p>
+<span><a href="https://wa.me/5543988712083" target="_blank" rel="noopener" style="color: inherit; text-decoration: none">(43) 98871-2083</a> · <a href="mailto:contato@hevron.com.br" style="color: inherit; text-decoration: none">contato@hevron.com.br</a></span>
+<div style="display: flex; gap: 16px; justify-content: center; margin-top: 4px">
+<a href="https://www.facebook.com/profile.php?id=61596023660352" target="_blank" rel="noopener" aria-label="Hevron no Facebook" style="width: 52px; height: 52px; border-radius: 50%; background: #F7F5F1; color: #1C1B19; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z"></path></svg></a>
+<a href="https://www.instagram.com/hevron_empreendimentos/" target="_blank" rel="noopener" aria-label="Hevron no Instagram" style="width: 52px; height: 52px; border-radius: 50%; background: #F7F5F1; color: #1C1B19; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"></circle></svg></a>
+<a href="https://www.pinterest.com/0uj5ldpr005fzqssy8wbezdyjvav8y/" target="_blank" rel="noopener" aria-label="Hevron no Pinterest" style="width: 52px; height: 52px; border-radius: 50%; background: #F7F5F1; color: #1C1B19; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.3 3C7.4 3 5 6.4 5 9.3c0 1.7.7 3.3 2.1 3.9.2.1.4 0 .5-.2l.2-.8c.1-.3 0-.4-.2-.6-.4-.5-.7-1.1-.7-2 0-2.5 1.9-4.8 5-4.8 2.7 0 4.2 1.7 4.2 3.9 0 2.9-1.3 5.4-3.2 5.4-1.1 0-1.9-.9-1.6-2 .3-1.3.9-2.7.9-3.6 0-.8-.4-1.5-1.4-1.5-1.1 0-2 1.1-2 2.7 0 1 .3 1.6.3 1.6L8 16.1c-.4 1.6-.1 3.6 0 3.8 0 .1.2.2.3.1.1-.1 1.4-1.7 1.8-3.3l.7-2.7c.3.7 1.3 1.2 2.4 1.2 3.2 0 5.3-2.9 5.3-6.7C18.5 5.7 15.9 3 12.3 3z"></path></svg></a>
+<a href="https://wa.me/5543988712083" target="_blank" rel="noopener" aria-label="Hevron no WhatsApp" style="width: 52px; height: 52px; border-radius: 50%; background: #F7F5F1; color: #1C1B19; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg></a>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; text-align: center">
+<div style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px">
+<div style="color: #EDE9E2; font-weight: 600">Reforma de apartamento</div>
+<a href="reforma-apartamento.dc.html" style="color: #B8B2A8; text-decoration: none">Reforma completa</a>
+<a href="reforma-cozinha.dc.html" style="color: #B8B2A8; text-decoration: none">Cozinha</a>
+<a href="reforma-banheiro.dc.html" style="color: #B8B2A8; text-decoration: none">Banheiro</a>
+</div>
+<div style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px">
+<div style="color: #EDE9E2; font-weight: 600">Casas</div>
+<a href="construir-casa-terrea.dc.html" style="color: #B8B2A8; text-decoration: none">Construção</a>
+<a href="construir-ampliacao.dc.html" style="color: #B8B2A8; text-decoration: none">Ampliação</a>
+<a href="reforma-areas-externas.dc.html" style="color: #B8B2A8; text-decoration: none">Fachada</a>
+</div>
+<div style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px">
+<div style="color: #EDE9E2; font-weight: 600">Construir</div>
+<a href="construir-casa-terrea.dc.html" style="color: #B8B2A8; text-decoration: none">Casa térrea</a>
+<a href="construir-sobrado.dc.html" style="color: #B8B2A8; text-decoration: none">Sobrado</a>
+<a href="construir-ampliacao.dc.html" style="color: #B8B2A8; text-decoration: none">Ampliação</a>
+</div>
+<div style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px">
+<div style="color: #EDE9E2; font-weight: 600">Empresa</div>
+<a href="sobre-nos.dc.html" style="color: #B8B2A8; text-decoration: none">Sobre nós</a>
+<a href="rede-parceiros.dc.html" style="color: #B8B2A8; text-decoration: none">Trabalhe conosco</a>
+<a href="https://wa.me/5543988712083" target="_blank" rel="noopener" style="color: #B8B2A8; text-decoration: none">Contato</a>
+</div>
+</div>
+<div style="border-top: 1px solid #3F3B35; padding-top: 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; font-size: 14px">
+<span>© 2026 Hevron. Todos os direitos reservados. CNPJ 50.469.536/0001-29</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px">
+<a href="/politica-de-privacidade" style="color: #B8B2A8">Política de privacidade</a>
+<a href="/termos-de-uso" style="color: #B8B2A8">Termos de uso</a>
+<a href="/politica-de-privacidade#cookies" style="color: #B8B2A8">Gerenciar cookies</a>
+</div>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#A84E28","options":["#A84E28","#2F5D50","#1F4E79","#8A6A2F"]},"$preview":{"width":1440,"height":4600}}'>
+class Component extends DCLogic {
+componentDidMount() {
+this._onScroll = () => {
+const r = this._hero && this._hero.getBoundingClientRect ? this._hero.getBoundingClientRect() : null;
+const solid = r ? r.bottom <= 90 : false;
+if (solid !== !!(this.state && this.state.solid)) this.setState({ solid: solid });
+};
+document.addEventListener('scroll', this._onScroll, true);
+window.addEventListener('scroll', this._onScroll);
+window.addEventListener('resize', this._onScroll);
+this._onScroll();
+}
+componentWillUnmount() {
+document.removeEventListener('scroll', this._onScroll, true);
+window.removeEventListener('scroll', this._onScroll);
+window.removeEventListener('resize', this._onScroll);
+}
+renderVals() {
+const st = this.state || {};
+const solid = !!st.solid;
+const menuOpen = !!st.menuOpen;
+const buildOpen = !!st.buildOpen;
+const partnerOpen = !!st.partnerOpen;
+const faqData = [];
+const projData = [{"cat_ids": ["construcao"], "cat": "Construção", "title": "Casa com piscina", "desc": "Casa construída do zero, com fachada branca, piscina e área de lazer integrada.", "img": "/_blob/8afcec61e663f6e6b080592370eeb90c", "alt": "Casa branca moderna com piscina"}, {"cat_ids": ["areas"], "cat": "Áreas externas", "title": "Deck com jacuzzi", "desc": "Deck de madeira com jacuzzi, paisagismo e iluminação para aproveitar o jardim.", "img": "/_blob/483823d44abc8a6872a5f7180d93392f", "alt": "Deck de madeira com jacuzzi cercado por jardim"}, {"cat_ids": ["areas"], "cat": "Áreas externas", "title": "Entrada em pedra", "desc": "Piso e degraus em pedra natural que valorizam a chegada da casa.", "img": "/_blob/26f2973043d4de123be7c50c00be24e8", "alt": "Entrada de casa com piso e degraus de pedra"}, {"cat_ids": ["banheiros", "marmore"], "cat": "Banheiros", "title": "Banheiro em mármore escuro", "desc": "Parede revestida em mármore escuro com bancada de madeira e iluminação embutida.", "img": "/_blob/551ad6fcc3c756ba92a83c111c1eb52c", "alt": "Banheiro com parede de mármore escuro e bancada de madeira"}, {"cat_ids": ["banheiros", "marmore"], "cat": "Banheiros", "title": "Banheiro com duas cubas", "desc": "Mármore cinza do piso ao teto e bancada com duas cubas para o dia a dia do casal.", "img": "/_blob/f4bc4dae899a15ca6e6c0c8538009598", "alt": "Banheiro em mármore cinza com bancada de duas cubas"}, {"cat_ids": ["banheiros", "marmore"], "cat": "Banheiros", "title": "Lavabo em mármore branco", "desc": "Mármore branco com espelho de moldura dourada para um lavabo marcante.", "img": "/_blob/b4de6d0ee6b2105c16e16e6404eb6d53", "alt": "Lavabo de mármore branco com espelho dourado"}, {"cat_ids": ["salas", "marmore"], "cat": "Salas", "title": "Sala com painel de mármore", "desc": "Painel em mármore preto como ponto de destaque da sala de estar.", "img": "/_blob/2ddba2a706f5a880db5d054ac82b7d67", "alt": "Sala de estar com painel de mármore preto"}, {"cat_ids": ["marmore"], "cat": "Mármore", "title": "Escada em mármore", "desc": "Degraus em mármore com iluminação indireta, unindo os pavimentos da casa.", "img": "/_blob/97b805e3508ab7f36cd4fa680daa4159", "alt": "Escada de mármore com iluminação"}, {"cat_ids": ["cozinhas", "marmore"], "cat": "Cozinhas", "title": "Cozinha com ilha em mármore", "desc": "Ilha central em mármore que funciona como bar e mesa para receber.", "img": "/_blob/1e28f171573c4fb9e11eda480e84fc1c", "alt": "Cozinha com bar e ilha de mármore"}, {"cat_ids": ["construcao"], "cat": "Construção", "title": "Casa térrea com coqueiros", "desc": "Casa térrea construída do zero, com paisagismo tropical e fachada clara.", "img": "/_blob/9176185e92b8bfc264638aa0976f4236", "alt": "Casa térrea com coqueiros no jardim"}];
+const catData = [{"id": "todos", "label": "Todos"}, {"id": "cozinhas", "label": "Cozinhas"}, {"id": "banheiros", "label": "Banheiros"}, {"id": "salas", "label": "Salas"}, {"id": "marmore", "label": "Mármore"}, {"id": "areas", "label": "Áreas externas"}, {"id": "construcao", "label": "Construção"}];
+const cat = st.cat || 'todos';
+const openFaq = st.faq === undefined ? 0 : st.faq;
+return {
+heroRef: (el) => { this._hero = el; },
+headerStyle: 'position: sticky; top: 0; z-index: 30; margin-bottom: -84px; transition: background-color .25s ease, box-shadow .25s ease; ' + ((solid || menuOpen || buildOpen) ? 'background: #FFFFFF; box-shadow: 0 1px 0 #DED8CE, 0 6px 18px rgba(28,27,25,0.08)' : 'background: transparent; box-shadow: none'),
+navColor: (solid || menuOpen || buildOpen) ? '#1C1B19' : '#FFFFFF',
+menuColor: menuOpen ? '#A84E28' : ((solid || buildOpen) ? '#1C1B19' : '#FFFFFF'),
+buildOpen: buildOpen,
+buildChevron: buildOpen ? 'transform: rotate(180deg)' : '',
+buildColor: buildOpen ? '#A84E28' : ((solid || menuOpen) ? '#1C1B19' : '#FFFFFF'),
+toggleBuild: () => this.setState({ buildOpen: !buildOpen, menuOpen: false, partnerOpen: false }),
+partnerBg: (solid || menuOpen || buildOpen) ? '#EDE9E2' : '#F7F5F1',
+menuOpen: menuOpen,
+menuChevron: menuOpen ? 'transform: rotate(180deg)' : '',
+toggleMenu: () => this.setState({ menuOpen: !menuOpen, partnerOpen: false, buildOpen: false }),
+partnerOpen: partnerOpen,
+chevronStyle: partnerOpen ? 'transform: rotate(180deg)' : '',
+togglePartner: () => this.setState({ partnerOpen: !partnerOpen, menuOpen: false, buildOpen: false }),
+accent: this.props.accent ?? '#A84E28',
+faqs: faqData.map((d, i) => ({ q: d.q, a: d.a, open: i === openFaq, toggle: () => this.setState({ faq: i === openFaq ? -1 : i }), iconStyle: 'flex: 0 0 auto; transition: transform .2s ease; ' + (i === openFaq ? 'transform: rotate(180deg)' : '') })),
+filters: catData.map((c) => ({ label: c.label, active: c.id === cat, pick: () => this.setState({ cat: c.id }), style: 'font: 500 16px Figtree, sans-serif; min-height: 44px; padding: 10px 20px; border-radius: 999px; cursor: pointer; ' + (c.id === cat ? 'background: #1C1B19; color: #FFFFFF; border: 1px solid #1C1B19' : 'background: #FFFFFF; color: #1C1B19; border: 1px solid #DED8CE') })),
+projects: projData.filter((p) => cat === 'todos' || p.cat_ids.indexOf(cat) !== -1)
+};
+}
+}
+</script>
+</body>
+</html>
