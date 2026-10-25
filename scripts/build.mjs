@@ -89,6 +89,109 @@ function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// Menu do celular: três barrinhas ao lado do logo que abrem a lista de páginas.
+const MOBILE_LINKS = [
+  ['Reformar', [
+    ['Reforma de casa', '/reforma-casa'], ['Reforma de apartamento', '/reforma-apartamento'],
+    ['Reforma de cozinha', '/reforma-cozinha'], ['Reforma de banheiro', '/reforma-banheiro'],
+    ['Áreas externas', '/reforma-areas-externas'], ['Pisos', '/reforma-pisos'],
+    ['Pintura e revestimentos', '/reforma-pintura'], ['Elétrica e hidráulica', '/reforma-eletrica-hidraulica'],
+    ['Eficiência energética', '/reforma-eficiencia-energetica'], ['Mármore', '/reforma-marmore'],
+  ]],
+  ['Construir', [
+    ['Casa térrea', '/construir-casa-terrea'], ['Sobrado', '/construir-sobrado'],
+    ['Casa de alto padrão', '/construir-alto-padrao'], ['Ampliação', '/construir-ampliacao'],
+    ['Área de lazer e piscina', '/construir-area-lazer'], ['Imóvel comercial', '/construir-comercial'],
+  ]],
+  ['Projetos', '/projetos'],
+  ['Como funciona', '/como-funciona'],
+  ['Sobre nós', '/sobre-nos'],
+  ['Seja parceiro', '/rede-parceiros'],
+];
+
+const BURGER_ICON = { t: 'svg', a: { width: '26', height: '26', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'aria-hidden': 'true' }, c: [
+  { t: 'path', a: { class: 'hv-i-open', d: 'M4 7h16M4 12h16M4 17h16' }, c: [] },
+  { t: 'path', a: { class: 'hv-i-close', d: 'M6 6l12 12M18 6L6 18' }, c: [] },
+] };
+
+function mobileMenuNodes(logoStyle) {
+  const link = ([label, href]) => ({ t: 'a', a: { href }, c: [label] });
+  const items = MOBILE_LINKS.map(([label, v]) => Array.isArray(v)
+    ? { t: 'details', a: {}, c: [{ t: 'summary', a: {}, c: [label] }, { t: 'div', a: { class: 'hv-sub' }, c: v.map(link) }] }
+    : link([label, v]));
+  items.push({ t: 'a', a: { href: '/comecar-projeto', class: 'hv-cta' }, c: ['Começar meu projeto'] });
+  const burgerStyle = Array.isArray(logoStyle) ? [...logoStyle] : [logoStyle || ''];
+  burgerStyle.push('; display: none; background: transparent; border: 0; padding: 0; cursor: pointer; min-width: 44px; justify-content: center');
+  return {
+    burger: { t: 'button', a: { type: 'button', class: 'hv-burger', 'aria-label': 'Abrir menu', 'aria-expanded': 'false', style: burgerStyle }, c: [BURGER_ICON] },
+    panel: { t: 'nav', a: { class: 'hv-mobile-menu', 'aria-label': 'Menu do celular' }, c: items },
+  };
+}
+
+// Procura o cabeçalho com o menu principal e encaixa as barrinhas e o painel.
+function addMobileMenu(tree) {
+  let done = false;
+  (function walk(nodes) {
+    for (const n of nodes) {
+      if (done || !n || typeof n !== 'object' || !n.c) continue;
+      if (n.t === 'header') {
+        const inner = n.c.find((k) => k.t === 'div');
+        const navIdx = inner ? inner.c.findIndex((k) => k.t === 'nav' && k.a['aria-label'] === 'Menu principal') : -1;
+        if (navIdx < 0) return;
+        const logoIdx = inner.c.findIndex((k) => k.t === 'a');
+        const actions = inner.c.slice(navIdx + 1).find((k) => k.t === 'div');
+        if (actions) actions.a.class = 'hv-actions';
+        inner.c[navIdx].a.class = 'hv-desktop-nav';
+        const { burger, panel } = mobileMenuNodes(inner.c[logoIdx].a.style);
+        inner.c.splice(logoIdx, 0, burger);
+        inner.c.push(panel);
+        done = true;
+        return;
+      }
+      walk(n.c);
+    }
+  })(tree);
+  return done;
+}
+
+const MOBILE_CSS = `<style>
+.hv-mobile-menu{display:none}
+@media (max-width: 900px){
+  header .hv-desktop-nav, header .hv-actions{display:none !important}
+  header .hv-burger{display:inline-flex !important; margin-left:-10px}
+  header > div{gap:8px !important; flex-wrap:nowrap !important}
+  .hv-burger .hv-i-close{display:none}
+  html.hv-open .hv-burger .hv-i-open{display:none}
+  html.hv-open .hv-burger .hv-i-close{display:inline}
+  html.hv-open header{background:#FFFFFF !important; box-shadow:0 1px 0 #DED8CE !important}
+  html.hv-open header .hv-burger, html.hv-open header a[aria-label^="Hevron"]{color:#1C1B19 !important}
+  html.hv-open{overflow:hidden}
+  html.hv-open .hv-mobile-menu{display:flex}
+  .hv-mobile-menu{position:absolute; top:100%; left:0; right:0; height:calc(100vh - 80px); height:calc(100dvh - 80px); overflow-y:auto; background:#FFFFFF; flex-direction:column; padding:8px 24px 32px; box-sizing:border-box; font-family:Figtree,sans-serif; border-top:1px solid #DED8CE}
+  .hv-mobile-menu > a, .hv-mobile-menu summary{display:flex; align-items:center; justify-content:space-between; min-height:56px; border-bottom:1px solid #EDE9E2; color:#1C1B19; text-decoration:none; font-size:19px; font-weight:500; cursor:pointer; list-style:none}
+  .hv-mobile-menu summary::-webkit-details-marker{display:none}
+  .hv-mobile-menu summary::after{content:""; width:9px; height:9px; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:rotate(45deg); margin:0 4px 6px 0; transition:transform .2s}
+  .hv-mobile-menu details[open] summary::after{transform:rotate(-135deg); margin-bottom:0}
+  .hv-sub{display:flex; flex-direction:column; padding:4px 0 12px 16px; border-bottom:1px solid #EDE9E2}
+  .hv-sub a{color:#3F3B35; text-decoration:none; font-size:17px; min-height:44px; display:flex; align-items:center}
+  .hv-mobile-menu a.hv-cta{margin-top:24px; justify-content:center; background:#A84E28; color:#FFFFFF; border:0; border-radius:4px; font-weight:600; font-size:17px}
+}
+</style>`;
+
+const MOBILE_JS = `<script>
+document.addEventListener('click', function (e) {
+  var root = document.documentElement;
+  var b = e.target.closest && e.target.closest('.hv-burger');
+  if (b) {
+    var open = root.classList.toggle('hv-open');
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    b.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  } else if (e.target.closest && e.target.closest('.hv-mobile-menu a')) {
+    root.classList.remove('hv-open');
+  }
+});
+</script>`;
+
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.cpSync(path.join(ROOT, 'public'), DIST, { recursive: true });
 fs.mkdirSync(path.join(DIST, 'js'), { recursive: true });
@@ -113,6 +216,7 @@ for (const file of files) {
     : '';
   const body = xdc.childNodes.filter((n) => n !== helmet);
   const tree = body.flatMap(convert);
+  const hasMobileMenu = addMobileMenu(tree);
   const script = find(doc, (n) => n.tagName === 'script' && n.attrs.some((a) => a.name === 'data-dc-script'));
   const logicSrc = textOf(script);
   const propsAttr = script.attrs.find((a) => a.name === 'data-props');
@@ -154,9 +258,11 @@ for (const file of files) {
 <meta property="og:url" content="${url}">
 <meta property="og:locale" content="pt_BR">
 ${headExtra}
+${hasMobileMenu ? MOBILE_CSS : ''}
 </head>
 <body>
 <div id="app">${appHtml}</div>
+${hasMobileMenu ? MOBILE_JS : ''}
 <script type="module" src="/js/${slug}.js"></script>
 </body>
 </html>
