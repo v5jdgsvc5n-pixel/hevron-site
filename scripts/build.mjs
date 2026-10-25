@@ -14,7 +14,7 @@ const PAGES = path.join(ROOT, 'src/pages');
 const DIST = path.join(ROOT, 'dist');
 const SITE_URL = 'https://hevron.com.br';
 // ID do Google Analytics (começa com G-). Só carrega se o visitante aceitar os cookies.
-const GA_ID = process.env.GA_ID || '';
+const GA_ID = process.env.GA_ID || 'G-5XPVW7GMQ0';
 
 // "reforma-casa.dc.html" → "/reforma-casa", "Main.dc.html" → "/"
 function pageUrl(file) {
