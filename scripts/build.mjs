@@ -13,6 +13,8 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')
 const PAGES = path.join(ROOT, 'src/pages');
 const DIST = path.join(ROOT, 'dist');
 const SITE_URL = 'https://hevron.com.br';
+// ID do Google Analytics (começa com G-). Só carrega se o visitante aceitar os cookies.
+const GA_ID = process.env.GA_ID || '';
 
 // "reforma-casa.dc.html" → "/reforma-casa", "Main.dc.html" → "/"
 function pageUrl(file) {
@@ -192,6 +194,89 @@ document.addEventListener('click', function (e) {
 });
 </script>`;
 
+// O aviso de cookies antigo (só na página inicial) dá lugar ao aviso de consentimento abaixo.
+function removeOldCookieBanner(nodes) {
+  return nodes.filter((n) => !(n && n.if && n.if.x === 'showCookies'))
+    .map((n) => (n && typeof n === 'object' && n.c ? { ...n, c: removeOldCookieBanner(n.c) } : n));
+}
+
+const BTN = 'font: 600 15px Figtree, sans-serif; padding: 12px 18px; min-height: 44px; border: 1px solid #1C1B19; border-radius: 4px; cursor: pointer';
+const CONSENT_HTML = `<div id="hv-consent" role="dialog" aria-label="Preferências de cookies" hidden style="position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 40; max-width: 560px; margin-left: auto; background: #FFFFFF; color: #1C1B19; border: 1px solid #DED8CE; border-radius: 8px; padding: 24px; box-sizing: border-box; flex-direction: column; gap: 14px; box-shadow: 0 8px 28px rgba(28,27,25,0.18); font-family: Figtree, sans-serif; line-height: 1.5">
+<div style="font-weight: 600; font-size: 17px">Usamos cookies</div>
+<p style="margin: 0; color: #5A564F; font-size: 15px">Alguns são necessários para o site funcionar. Com a sua permissão, usamos também o Google Analytics para medir a audiência e melhorar o site. <a href="/politica-de-privacidade#cookies" style="color: #1C1B19">Saiba mais</a></p>
+<div class="hv-prefs" hidden style="border-top: 1px solid #EDE9E2; padding-top: 12px; font-size: 15px">
+<label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px"><input type="checkbox" checked disabled style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #1C1B19"><span><strong>Necessários</strong><br><span style="color: #5A564F">Guardam a sua escolha sobre cookies. Sempre ativos.</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px; margin-top: 8px; cursor: pointer"><input type="checkbox" id="hv-ga" style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #1C1B19"><span><strong>Medição de audiência</strong><br><span style="color: #5A564F">Google Analytics: quantas pessoas visitam e quais páginas mais acessam.</span></span></label>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<button type="button" data-hv-c="recusar" style="${BTN}; background: #FFFFFF; color: #1C1B19">Recusar tudo</button>
+<button type="button" data-hv-c="personalizar" style="${BTN}; background: #FFFFFF; color: #1C1B19">Personalizar</button>
+<button type="button" data-hv-c="salvar" hidden style="${BTN}; background: #FFFFFF; color: #1C1B19">Salvar escolha</button>
+<button type="button" data-hv-c="aceitar" style="${BTN}; background: #1C1B19; color: #FFFFFF">Aceitar tudo</button>
+</div>
+</div>`;
+
+const CONSENT_JS = `<script>
+(function () {
+  var KEY = 'hevron-consent', GA = ${JSON.stringify(GA_ID)};
+  var box = document.getElementById('hv-consent');
+  var prefs = box.querySelector('.hv-prefs'), ga = document.getElementById('hv-ga');
+  var save = box.querySelector('[data-hv-c="salvar"]'), custom = box.querySelector('[data-hv-c="personalizar"]');
+  function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function loadGA() {
+    if (!GA || window.__hvGA) return;
+    window.__hvGA = true;
+    window['ga-disable-' + GA] = false;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA;
+    document.head.appendChild(s);
+  }
+  function stopGA() {
+    if (GA) window['ga-disable-' + GA] = true;
+    var host = location.hostname.replace(/^www\./, '');
+    document.cookie.split(';').forEach(function (c) {
+      var n = c.split('=')[0].trim();
+      if (/^_ga/.test(n)) ['', host, '.' + host].forEach(function (d) {
+        document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
+      });
+    });
+  }
+  function show(withPrefs) {
+    ga.checked = get() === 'aceito';
+    prefs.hidden = !withPrefs; save.hidden = !withPrefs; custom.hidden = !!withPrefs;
+    box.hidden = false; box.style.display = 'flex';
+  }
+  function choose(v) {
+    set(v);
+    box.hidden = true; box.style.display = 'none';
+    if (v === 'aceito') loadGA(); else stopGA();
+  }
+  box.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-hv-c]');
+    if (!b) return;
+    var a = b.getAttribute('data-hv-c');
+    if (a === 'aceitar') choose('aceito');
+    else if (a === 'recusar') choose('recusado');
+    else if (a === 'personalizar') show(true);
+    else if (a === 'salvar') choose(ga.checked ? 'aceito' : 'recusado');
+  });
+  document.addEventListener('click', function (e) {
+    var l = e.target.closest && e.target.closest('a[href$="#cookies"]');
+    if (!l || box.contains(l) || !/gerenciar/i.test(l.textContent)) return;
+    e.preventDefault();
+    show(true);
+  });
+  var c = get();
+  if (c === 'aceito') loadGA(); else if (!c) show(false);
+})();
+</script>`;
+
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.cpSync(path.join(ROOT, 'public'), DIST, { recursive: true });
 fs.mkdirSync(path.join(DIST, 'js'), { recursive: true });
@@ -215,7 +300,7 @@ for (const file of files) {
     ? helmet.childNodes.filter((n) => n.tagName).map((n) => serializeOuter(n)).join('\n')
     : '';
   const body = xdc.childNodes.filter((n) => n !== helmet);
-  const tree = body.flatMap(convert);
+  const tree = removeOldCookieBanner(body.flatMap(convert));
   const hasMobileMenu = addMobileMenu(tree);
   const script = find(doc, (n) => n.tagName === 'script' && n.attrs.some((a) => a.name === 'data-dc-script'));
   const logicSrc = textOf(script);
@@ -263,6 +348,8 @@ ${hasMobileMenu ? MOBILE_CSS : ''}
 <body>
 <div id="app">${appHtml}</div>
 ${hasMobileMenu ? MOBILE_JS : ''}
+${CONSENT_HTML}
+${CONSENT_JS}
 <script type="module" src="/js/${slug}.js"></script>
 </body>
 </html>

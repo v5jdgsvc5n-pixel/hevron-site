@@ -90,17 +90,6 @@ export class DCLogic extends Component {}
 
 export function makePage(tree, Logic) {
   return class Page extends Logic {
-    componentDidMount() {
-      if (super.componentDidMount) super.componentDidMount();
-      // Lembra a escolha do aviso de cookies entre visitas.
-      try { if (localStorage.getItem('hevron-cookies')) this.setState({ cookiesClosed: true }); } catch (e) { /* sem armazenamento */ }
-    }
-    componentDidUpdate(prevProps, prevState) {
-      if (super.componentDidUpdate) super.componentDidUpdate(prevProps, prevState);
-      if (this.state && this.state.cookiesClosed) {
-        try { localStorage.setItem('hevron-cookies', '1'); } catch (e) { /* sem armazenamento */ }
-      }
-    }
     render() {
       const vals = this.renderVals ? this.renderVals() : {};
       return h(Fragment, null, ...renderNodes(tree, vals));

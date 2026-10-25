@@ -38,7 +38,7 @@ def h2(t, id=None):
 def p(t): return f'<p style="{P}">{t}</p>'
 def ul(items): return f'<ul style="{UL}">' + ''.join(f'<li style="margin-bottom: 6px">{i}</li>' for i in items) + '</ul>'
 
-atual = p('<strong>Última atualização:</strong> 23 de outubro de 2026.')
+atual = p('<strong>Última atualização:</strong> 25 de outubro de 2026.')
 
 priv = '\n'.join([
   atual,
@@ -65,6 +65,7 @@ priv = '\n'.join([
     '<strong>Vercel:</strong> hospedagem do site.',
     '<strong>Supabase:</strong> armazenamento seguro dos pedidos enviados pelos formulários.',
     '<strong>Resend:</strong> envio do e-mail interno que nos avisa de cada novo pedido.',
+    '<strong>Google Analytics:</strong> medição de audiência do site, somente se você aceitar (veja Cookies abaixo).',
   ]),
   p('Alguns desses serviços guardam dados em servidores fora do Brasil, com garantias de segurança compatíveis com a LGPD. Quando a sua obra for contratada, os dados necessários poderão ser compartilhados com os profissionais da equipe que vai executá-la.'),
   h2('Por quanto tempo guardamos'),
@@ -74,7 +75,12 @@ priv = '\n'.join([
   ul(['confirmar se tratamos os seus dados e ter acesso a eles;', 'corrigir dados incompletos ou desatualizados;', 'apagar os seus dados ou revogar o seu consentimento;', 'saber com quem compartilhamos os seus dados.']),
   p('Basta escrever para <a href="mailto:contato@hevron.com.br">contato@hevron.com.br</a>. Respondemos em até 15 dias. Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).'),
   h2('Cookies', 'cookies'),
-  p('O site não usa cookies de publicidade nem de rastreamento. Guardamos no seu navegador apenas a informação de que você já viu o aviso de cookies, para não mostrá-lo de novo. Para ver o aviso outra vez, basta limpar os dados de navegação deste site no seu navegador.'),
+  p('Cookies são pequenos arquivos que o site guarda no seu navegador. Usamos dois tipos:'),
+  ul([
+    '<strong>Necessários:</strong> guardam a sua escolha sobre cookies, para não perguntarmos de novo a cada página. Ficam sempre ativos.',
+    '<strong>Medição de audiência (Google Analytics):</strong> nos mostram quantas pessoas visitam o site, de onde vêm e quais páginas mais acessam, de forma estatística. Só são ativados se você clicar em Aceitar ou ligar essa opção em Personalizar. Não usamos esses dados para publicidade.',
+  ]),
+  p('Você pode mudar sua escolha a qualquer momento pelo link <a href="#cookies" >Gerenciar cookies</a>, que também fica no rodapé de todas as páginas. O Google Analytics é um serviço do Google, que pode tratar dados fora do Brasil; saiba mais na <a href="https://policies.google.com/privacy?hl=pt-BR" target="_blank" rel="noopener">política de privacidade do Google</a>.'),
   h2('Segurança'),
   p('O site usa conexão segura (HTTPS) e os pedidos ficam em um banco de dados com acesso restrito à equipe da Hevron.'),
   h2('Mudanças nesta política'),
