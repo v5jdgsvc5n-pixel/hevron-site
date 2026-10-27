@@ -107,6 +107,7 @@ priv = [
     ul([
       '<strong>Registros de acesso:</strong> endereço IP, data e hora de cada acesso, registrados pelo serviço de hospedagem para segurança do site e porque a lei exige (Marco Civil da Internet, art. 15).',
       '<strong>Dados de navegação:</strong> páginas visitadas, tipo de aparelho e navegador, cidade aproximada e de onde você chegou ao site, coletados pelo Google Analytics <em>somente se você aceitar</em> os cookies de medição.',
+      '<strong>Origem do pedido:</strong> quando você envia um formulário, registramos junto de onde chegou ao site (por exemplo, uma busca no Google, o Instagram ou um anúncio nosso) e a primeira página que abriu. Essa informação fica guardada só na aba do navegador até ela ser fechada e serve para sabermos quais canais trazem pedidos.',
     ]),
     p('Não pedimos documentos, dados bancários nem dados sensíveis (como saúde, religião ou origem racial) pelo site. Por favor, não escreva esse tipo de informação nos campos de texto livre.'),
   ]),

@@ -274,6 +274,27 @@ const CONSENT_JS = `<script>
   });
   var c = get();
   if (c === 'aceito') loadGA(); else if (!c) show(false);
+
+  // Origem da visita (anúncio, Google, Instagram…), guardada só nesta aba
+  // e enviada junto com o pedido para sabermos qual canal trouxe o cliente.
+  var OK = 'hevron-origem', P = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+  try {
+    var q = new URLSearchParams(location.search), o = {};
+    P.forEach(function (k) { if (q.get(k)) o[k] = q.get(k).slice(0, 200); });
+    var ref = document.referrer && document.referrer.indexOf(location.origin) !== 0 ? document.referrer.slice(0, 300) : '';
+    if (Object.keys(o).length || !sessionStorage.getItem(OK)) {
+      if (ref) o.referrer = ref;
+      o.entrada = location.pathname;
+      sessionStorage.setItem(OK, JSON.stringify(o));
+    }
+  } catch (e) {}
+  window.hvOrigem = function () { try { return JSON.parse(sessionStorage.getItem(OK)) || {}; } catch (e) { return {}; } };
+  // Conversões: só chegam ao Google Analytics se o visitante aceitou os cookies.
+  window.hvTrack = function (name, params) { if (window.__hvGA && window.gtag) gtag('event', name, params || {}); };
+  document.addEventListener('click', function (e) {
+    var w = e.target.closest && e.target.closest('a[href*="wa.me/"]');
+    if (w) hvTrack('contato_whatsapp', { pagina: location.pathname });
+  });
 })();
 </script>`;
 

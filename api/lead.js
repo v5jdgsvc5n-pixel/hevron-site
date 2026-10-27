@@ -17,6 +17,9 @@ function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// De onde a pessoa chegou ao site (anúncio, Google, Instagram…).
+const ORIGEM_CAMPOS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid', 'referrer', 'entrada'];
+
 function normalize(body) {
   const tipo = body.tipo === 'parceiro' ? 'parceiro' : 'projeto';
   const lead = {
@@ -40,6 +43,11 @@ function normalize(body) {
       mensagem: clean(body.mensagem, 2000),
     };
   }
+  const origem = {};
+  if (body.origem && typeof body.origem === 'object') {
+    for (const k of ORIGEM_CAMPOS) if (body.origem[k]) origem[k] = clean(body.origem[k], 300);
+  }
+  if (Object.keys(origem).length) lead.dados.origem = origem;
   return lead;
 }
 
