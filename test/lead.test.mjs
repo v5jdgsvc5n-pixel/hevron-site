@@ -53,3 +53,10 @@ test('cadastro de parceiro sem e-mail é aceito', async () => {
   assert.equal(res.code, 200);
   assert.equal(calls.find((c) => c.url.includes('/rest/v1/leads')).body.dados.cidade, 'Londrina');
 });
+
+test('origem do pedido é guardada, só com os campos conhecidos', async () => {
+  const origem = { utm_source: 'google', utm_campaign: 'banheiro-londrina', gclid: 'abc', outro: 'x' };
+  const { calls } = await call({ ...projeto, origem }, ENV);
+  const db = calls.find((c) => c.url.includes('/rest/v1/leads'));
+  assert.deepEqual(db.body.dados.origem, { utm_source: 'google', utm_campaign: 'banheiro-londrina', gclid: 'abc' });
+});

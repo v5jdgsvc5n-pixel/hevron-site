@@ -332,8 +332,8 @@ if (st.enviando) return;
 this.setState({ enviando: true, sendErr: '', fe: {}, nome: vNome, email: vEmail, cel: vCel });
 const respostas = {};
 qs.forEach((x) => { if (x.id in a) respostas[x.title] = a[x.id]; });
-fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tipo: 'projeto', nome: vNome.trim(), email: vEmail.trim(), telefone: vCel, dicas: !!st.dicas, aceite: true, respostas: respostas, site: document.getElementById('hp') ? document.getElementById('hp').value : '' }) })
-.then((r) => { if (!r.ok) throw new Error('falha'); this.setState({ step: total + 1, enviando: false }); })
+fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tipo: 'projeto', nome: vNome.trim(), email: vEmail.trim(), telefone: vCel, dicas: !!st.dicas, aceite: true, respostas: respostas, origem: window.hvOrigem ? window.hvOrigem() : {}, site: document.getElementById('hp') ? document.getElementById('hp').value : '' }) })
+.then((r) => { if (!r.ok) throw new Error('falha'); if (window.hvTrack) window.hvTrack('generate_lead', { tipo: 'projeto' }); this.setState({ step: total + 1, enviando: false }); })
 .catch(() => this.setState({ enviando: false, sendErr: 'Não conseguimos enviar agora. Tente de novo em instantes ou fale com a gente pelo WhatsApp (43) 98871-2083.' }));
 },
 sendErr: st.sendErr || '',

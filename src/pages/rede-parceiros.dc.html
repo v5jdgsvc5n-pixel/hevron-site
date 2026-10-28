@@ -347,7 +347,7 @@ const d = Object.fromEntries(new FormData(form).entries());
 if (String(d.nome || '').trim().length < 3) { this.setState({ sendErr: 'Informe o seu nome.' }); return; }
 if (String(d.telefone || '').replace(/\D/g, '').length < 10) { this.setState({ sendErr: 'Informe o telefone com DDD.' }); return; }
 this.setState({ enviando: true, sendErr: '' });
-fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ tipo: 'parceiro' }, d)) })
+fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ tipo: 'parceiro', origem: window.hvOrigem ? window.hvOrigem() : {} }, d)) })
 .then((r) => { if (!r.ok) throw new Error('falha'); form.reset(); this.setState({ sent: true, enviando: false }); })
 .catch(() => this.setState({ enviando: false, sendErr: 'Não conseguimos enviar agora. Tente de novo em instantes.' }));
 }
