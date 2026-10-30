@@ -15,6 +15,8 @@ const DIST = path.join(ROOT, 'dist');
 const SITE_URL = 'https://hevron.com.br';
 // ID do Google Analytics (começa com G-). Só carrega se o visitante aceitar os cookies.
 const GA_ID = process.env.GA_ID || 'G-5XPVW7GMQ0';
+// Pixel da Meta (Facebook e Instagram). Só carrega se o visitante aceitar os cookies de publicidade.
+const META_PIXEL_ID = process.env.META_PIXEL_ID || '2431985813998574';
 
 // "reforma-casa.dc.html" → "/reforma-casa", "Main.dc.html" → "/"
 function pageUrl(file) {
@@ -203,10 +205,11 @@ function removeOldCookieBanner(nodes) {
 const BTN = 'font: 600 15px Figtree, sans-serif; padding: 12px 18px; min-height: 44px; border: 1px solid #1C1B19; border-radius: 4px; cursor: pointer';
 const CONSENT_HTML = `<div id="hv-consent" role="dialog" aria-label="Preferências de cookies" hidden style="position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 40; max-width: 560px; margin-left: auto; background: #FFFFFF; color: #1C1B19; border: 1px solid #DED8CE; border-radius: 8px; padding: 24px; box-sizing: border-box; flex-direction: column; gap: 14px; box-shadow: 0 8px 28px rgba(28,27,25,0.18); font-family: Figtree, sans-serif; line-height: 1.5">
 <div style="font-weight: 600; font-size: 17px">Usamos cookies</div>
-<p style="margin: 0; color: #5A564F; font-size: 15px">Alguns são necessários para o site funcionar. Com a sua permissão, usamos também o Google Analytics para medir a audiência e melhorar o site. <a href="/politica-de-privacidade#cookies" style="color: #1C1B19">Saiba mais</a></p>
+<p style="margin: 0; color: #5A564F; font-size: 15px">Alguns são necessários para o site funcionar. Com a sua permissão, usamos também o Google Analytics para medir a audiência e o Pixel da Meta e o Google para medir os nossos anúncios. <a href="/politica-de-privacidade#cookies" style="color: #1C1B19">Saiba mais</a></p>
 <div class="hv-prefs" hidden style="border-top: 1px solid #EDE9E2; padding-top: 12px; font-size: 15px">
 <label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px"><input type="checkbox" checked disabled style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #1C1B19"><span><strong>Necessários</strong><br><span style="color: #5A564F">Guardam a sua escolha sobre cookies. Sempre ativos.</span></span></label>
 <label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px; margin-top: 8px; cursor: pointer"><input type="checkbox" id="hv-ga" style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #1C1B19"><span><strong>Medição de audiência</strong><br><span style="color: #5A564F">Google Analytics: quantas pessoas visitam e quais páginas mais acessam.</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px; margin-top: 8px; cursor: pointer"><input type="checkbox" id="hv-ads" style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #1C1B19"><span><strong>Publicidade</strong><br><span style="color: #5A564F">Pixel da Meta e Google: medir os nossos anúncios e mostrá-los de novo a quem já visitou o site.</span></span></label>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 10px">
 <button type="button" data-hv-c="recusar" style="${BTN}; background: #FFFFFF; color: #1C1B19">Recusar tudo</button>
@@ -218,18 +221,28 @@ const CONSENT_HTML = `<div id="hv-consent" role="dialog" aria-label="Preferênci
 
 const CONSENT_JS = `<script>
 (function () {
-  var KEY = 'hevron-consent', GA = ${JSON.stringify(GA_ID)};
+  // v2: a escolha antiga só cobria o Analytics; quem já tinha respondido vê o aviso de novo.
+  var KEY = 'hevron-consent-v2', GA = ${JSON.stringify(GA_ID)}, PIXEL = ${JSON.stringify(META_PIXEL_ID)};
   var box = document.getElementById('hv-consent');
-  var prefs = box.querySelector('.hv-prefs'), ga = document.getElementById('hv-ga');
+  var prefs = box.querySelector('.hv-prefs'), ga = document.getElementById('hv-ga'), ads = document.getElementById('hv-ads');
   var save = box.querySelector('[data-hv-c="salvar"]'), custom = box.querySelector('[data-hv-c="personalizar"]');
   function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
-  function loadGA() {
-    if (!GA || window.__hvGA) return;
+  // Escolha guardada: 'aceito' (tudo), 'medicao' (só Analytics), 'publicidade' (só anúncios) ou 'recusado'.
+  function wantsGA(v) { return v === 'aceito' || v === 'medicao'; }
+  function wantsAds(v) { return v === 'aceito' || v === 'publicidade'; }
+  function adsConsent(on) {
+    var g = on ? 'granted' : 'denied';
+    return { ad_storage: g, ad_user_data: g, ad_personalization: g };
+  }
+  function loadGA(withAds) {
+    if (!GA) return;
+    if (window.__hvGA) { gtag('consent', 'update', adsConsent(withAds)); return; }
     window.__hvGA = true;
     window['ga-disable-' + GA] = false;
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { dataLayer.push(arguments); };
+    gtag('consent', 'default', Object.assign({ analytics_storage: 'granted' }, adsConsent(withAds)));
     gtag('js', new Date());
     gtag('config', GA);
     var s = document.createElement('script');
@@ -237,25 +250,48 @@ const CONSENT_JS = `<script>
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA;
     document.head.appendChild(s);
   }
-  function stopGA() {
-    if (GA) window['ga-disable-' + GA] = true;
+  function clearCookies(re) {
     var host = location.hostname.replace(/^www\./, '');
     document.cookie.split(';').forEach(function (c) {
       var n = c.split('=')[0].trim();
-      if (/^_ga/.test(n)) ['', host, '.' + host].forEach(function (d) {
+      if (re.test(n)) ['', host, '.' + host].forEach(function (d) {
         document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
       });
     });
   }
+  function stopGA() {
+    if (GA) window['ga-disable-' + GA] = true;
+    clearCookies(/^_ga/);
+  }
+  function loadPixel() {
+    if (!PIXEL || window.fbq) { if (window.fbq) fbq('consent', 'grant'); return; }
+    var n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+    if (!window._fbq) window._fbq = n;
+    n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    document.head.appendChild(s);
+    fbq('init', PIXEL);
+    fbq('track', 'PageView');
+  }
+  function stopPixel() {
+    if (window.fbq) fbq('consent', 'revoke');
+    clearCookies(/^_fb[pc]$/);
+  }
+  function apply(v) {
+    if (wantsGA(v)) loadGA(wantsAds(v)); else stopGA();
+    if (wantsAds(v)) loadPixel(); else stopPixel();
+  }
   function show(withPrefs) {
-    ga.checked = get() === 'aceito';
+    ga.checked = wantsGA(get()); ads.checked = wantsAds(get());
     prefs.hidden = !withPrefs; save.hidden = !withPrefs; custom.hidden = !!withPrefs;
     box.hidden = false; box.style.display = 'flex';
   }
   function choose(v) {
     set(v);
     box.hidden = true; box.style.display = 'none';
-    if (v === 'aceito') loadGA(); else stopGA();
+    apply(v);
   }
   box.addEventListener('click', function (e) {
     var b = e.target.closest('[data-hv-c]');
@@ -264,7 +300,7 @@ const CONSENT_JS = `<script>
     if (a === 'aceitar') choose('aceito');
     else if (a === 'recusar') choose('recusado');
     else if (a === 'personalizar') show(true);
-    else if (a === 'salvar') choose(ga.checked ? 'aceito' : 'recusado');
+    else if (a === 'salvar') choose(ga.checked ? (ads.checked ? 'aceito' : 'medicao') : (ads.checked ? 'publicidade' : 'recusado'));
   });
   document.addEventListener('click', function (e) {
     var l = e.target.closest && e.target.closest('a[href$="#cookies"]');
@@ -273,7 +309,7 @@ const CONSENT_JS = `<script>
     show(true);
   });
   var c = get();
-  if (c === 'aceito') loadGA(); else if (!c) show(false);
+  if (c) apply(c); else show(false);
 
   // Origem da visita (anúncio, Google, Instagram…), guardada só nesta aba
   // e enviada junto com o pedido para sabermos qual canal trouxe o cliente.
@@ -289,8 +325,13 @@ const CONSENT_JS = `<script>
     }
   } catch (e) {}
   window.hvOrigem = function () { try { return JSON.parse(sessionStorage.getItem(OK)) || {}; } catch (e) { return {}; } };
-  // Conversões: só chegam ao Google Analytics se o visitante aceitou os cookies.
-  window.hvTrack = function (name, params) { if (window.__hvGA && window.gtag) gtag('event', name, params || {}); };
+  // Conversões: só chegam ao Google e à Meta se o visitante aceitou os cookies de cada um.
+  var META_EVENTOS = { generate_lead: 'Lead', contato_whatsapp: 'Contact' };
+  window.hvTrack = function (name, params) {
+    var v = get();
+    if (wantsGA(v) && window.gtag) gtag('event', name, params || {});
+    if (wantsAds(v) && window.fbq && META_EVENTOS[name]) fbq('track', META_EVENTOS[name]);
+  };
   document.addEventListener('click', function (e) {
     var w = e.target.closest && e.target.closest('a[href*="wa.me/"]');
     if (w) hvTrack('contato_whatsapp', { pagina: location.pathname });
