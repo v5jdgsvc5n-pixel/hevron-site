@@ -16,7 +16,7 @@ const SITE_URL = 'https://hevron.com.br';
 // ID do Google Analytics (começa com G-). Só carrega se o visitante aceitar os cookies.
 const GA_ID = process.env.GA_ID || 'G-5XPVW7GMQ0';
 // Pixel da Meta (Facebook e Instagram). Só carrega se o visitante aceitar os cookies de publicidade.
-const META_PIXEL_ID = process.env.META_PIXEL_ID || '2431985813998574';
+const META_PIXEL_ID = process.env.META_PIXEL_ID || '1907070293792489';
 
 // "reforma-casa.dc.html" → "/reforma-casa", "Main.dc.html" → "/"
 function pageUrl(file) {
