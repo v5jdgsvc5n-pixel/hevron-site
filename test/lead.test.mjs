@@ -17,19 +17,37 @@ const projeto = { tipo: 'projeto', nome: 'Maria Silva', email: 'maria@exemplo.co
 test('pedido de projeto válido é guardado e avisado por e-mail', async () => {
   const { res, calls } = await call(projeto, ENV);
   assert.equal(res.code, 200);
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   const db = calls.find((c) => c.url.includes('/rest/v1/leads'));
   assert.equal(db.body.nome, 'Maria Silva');
   assert.equal(db.body.dados.respostas['O que você quer fazer?'], 'Reformar um imóvel');
-  const mail = calls.find((c) => c.url.includes('resend'));
+  const mail = calls.find((c) => c.url.includes('resend') && c.body.to[0] === 'contato@hevron.com.br');
   assert.deepEqual(mail.body.to, ['contato@hevron.com.br']);
   assert.match(mail.body.html, /Maria Silva/);
 });
 
 test('HTML no nome não entra no e-mail', async () => {
   const { calls } = await call({ ...projeto, nome: '<b>Maria</b>' }, ENV);
-  const mail = calls.find((c) => c.url.includes('resend'));
-  assert.doesNotMatch(mail.body.html, /<b>Maria/);
+  const mails = calls.filter((c) => c.url.includes('resend'));
+  assert.equal(mails.length, 2);
+  for (const mail of mails) assert.doesNotMatch(mail.body.html, /<b>Maria/);
+});
+
+test('cliente recebe confirmação automática no e-mail', async () => {
+  const { calls } = await call(projeto, ENV);
+  const conf = calls.find((c) => c.url.includes('resend') && c.body.to[0] === 'maria@exemplo.com');
+  assert.ok(conf);
+  assert.equal(conf.body.subject, 'Maria, o seu projeto chegou até nós');
+  assert.equal(conf.body.reply_to, 'contato@hevron.com.br');
+  assert.match(conf.body.html, /Olá, Maria\./);
+  assert.doesNotMatch(conf.body.html, /Reformar um imóvel/);
+  assert.match(conf.body.html, /duas árvores plantadas/);
+  assert.doesNotMatch(conf.body.html, /wa\.me/);
+});
+
+test('sem e-mail não há confirmação', async () => {
+  const { calls } = await call({ tipo: 'parceiro', nome: 'João Pedreiro', telefone: '43988887777' }, ENV);
+  assert.equal(calls.filter((c) => c.url.includes('resend')).length, 1);
 });
 
 test('telefone curto é recusado', async () => {
