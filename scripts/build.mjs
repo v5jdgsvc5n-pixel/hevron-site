@@ -103,8 +103,8 @@ const MOBILE_LINKS = [
     ['Eficiência energética', '/reforma-eficiencia-energetica'], ['Mármore', '/reforma-marmore'],
   ]],
   ['Construir', [
-    ['Casa térrea', '/construir-casa-terrea'], ['Sobrado', '/construir-sobrado'],
-    ['Casa de alto padrão', '/construir-alto-padrao'], ['Ampliação', '/construir-ampliacao'],
+    ['Casa autoral', '/construir-casa-autoral'], ['Projeto exclusivo', '/construir-projeto-exclusivo'],
+    ['Residência sob medida', '/construir-sob-medida'], ['Ampliação', '/construir-ampliacao'],
     ['Área de lazer e piscina', '/construir-area-lazer'], ['Imóvel comercial', '/construir-comercial'],
   ]],
   ['Projetos', '/projetos'],
