@@ -40,7 +40,8 @@ test('cliente recebe confirmação automática no e-mail', async () => {
   assert.equal(conf.body.subject, 'Maria, recebemos o seu pedido');
   assert.equal(conf.body.reply_to, 'contato@hevron.com.br');
   assert.match(conf.body.html, /Olá, Maria!/);
-  assert.match(conf.body.html, /Reformar um imóvel/);
+  assert.doesNotMatch(conf.body.html, /Reformar um imóvel/);
+  assert.match(conf.body.html, /duas árvores plantadas/);
   assert.match(conf.body.html, /wa\.me\/5543988712083/);
 });
 

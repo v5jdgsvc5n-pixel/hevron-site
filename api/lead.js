@@ -124,6 +124,7 @@ async function sendEmail(lead) {
 }
 
 const WHATSAPP = '5543988712083';
+const ARVORES_IMG = 'https://hevron.com.br/img/email-arvores.jpg';
 
 function primeiroNome(nome) {
   const n = nome.split(/\s+/)[0] || '';
@@ -134,15 +135,8 @@ function primeiroNome(nome) {
 function confirmacaoHtml(lead) {
   const nome = escapeHtml(primeiroNome(lead.nome));
   const projeto = lead.tipo === 'projeto';
-  const respostas = projeto ? Object.entries(lead.dados.respostas || {}).filter(([, v]) => v) : [];
-  const resumo = respostas.length
-    ? `<p style="margin:28px 0 8px;font-weight:bold">O que você nos contou</p>
-<table cellpadding="6" style="border-collapse:collapse;width:100%;background:#F6F3EE">
-${respostas.map(([k, v]) => `<tr><td style="color:#5A564F;vertical-align:top;width:45%">${escapeHtml(k)}</td><td>${escapeHtml(v)}</td></tr>`).join('\n')}
-</table>`
-    : '';
   const corpo = projeto
-    ? `<p>Recebemos o seu pedido e ficamos felizes com a confiança. Um coordenador da Hevron vai analisar o que você nos contou e entrar em contato em breve pelo WhatsApp ou telefone que você informou.</p>
+    ? `<p>Recebemos o seu pedido e ficamos felizes com a confiança. Um coordenador da Hevron vai analisar o seu projeto e entrar em contato em breve pelo WhatsApp ou telefone que você informou.</p>
 <p><strong>Como trabalhamos:</strong></p>
 <ul style="padding-left:20px;margin:0">
 <li style="margin-bottom:6px">Orçamento detalhado por etapa, antes de começar.</li>
@@ -154,7 +148,11 @@ ${respostas.map(([k, v]) => `<tr><td style="color:#5A564F;vertical-align:top;wid
 <p style="font-family:Georgia,serif;font-size:26px;margin:0 0 24px"><span style="color:#A84E28">H</span>evron</p>
 <p>Olá, ${nome}!</p>
 ${corpo}
-${resumo}
+<div style="background:#F2F0E5;border-radius:8px;margin:28px 0 0;padding:20px 20px 24px;text-align:center">
+<img src="${ARVORES_IMG}" width="480" alt="Mudas crescendo até virar uma árvore" style="display:block;width:100%;max-width:480px;height:auto;margin:0 auto">
+<p style="font-family:Georgia,serif;font-size:22px;line-height:1.3;margin:16px 0 8px">Cada obra entregue, duas árvores plantadas.</p>
+<p style="margin:0;color:#5A564F">Ao final da sua obra, a Hevron planta duas árvores. Construir também é cuidar do planeta.</p>
+</div>
 <p style="margin-top:28px">Se quiser adiantar a conversa, é só nos chamar:</p>
 <p><a href="https://wa.me/${WHATSAPP}" style="display:inline-block;background:#A84E28;color:#FFFFFF;text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:bold">Falar no WhatsApp</a></p>
 <p style="margin-top:28px">Até breve,<br>Equipe Hevron<br><span style="color:#5A564F">(43) 98871-2083 · hevron.com.br</span></p>
