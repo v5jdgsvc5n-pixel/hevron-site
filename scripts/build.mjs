@@ -104,7 +104,7 @@ const MOBILE_LINKS = [
   ]],
   ['Construir', [
     ['Casa térrea', '/construir-casa-terrea'], ['Sobrado', '/construir-sobrado'],
-    ['Casa de alto padrão', '/construir-alto-padrao'], ['Ampliação', '/construir-ampliacao'],
+    ['Residência sob medida', '/construir-sob-medida'], ['Ampliação', '/construir-ampliacao'],
     ['Área de lazer e piscina', '/construir-area-lazer'], ['Imóvel comercial', '/construir-comercial'],
   ]],
   ['Projetos', '/projetos'],

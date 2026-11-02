@@ -4,6 +4,9 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/construir-alto-padrao", "destination": "/construir-sob-medida", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
