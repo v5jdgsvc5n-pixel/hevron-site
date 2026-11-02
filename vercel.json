@@ -5,7 +5,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/construir-alto-padrao", "destination": "/construir-sob-medida", "permanent": true }
+    { "source": "/construir-alto-padrao", "destination": "/construir-sob-medida", "permanent": true },
+    { "source": "/construir-casa-terrea", "destination": "/construir-casa-autoral", "permanent": true },
+    { "source": "/construir-sobrado", "destination": "/construir-projeto-exclusivo", "permanent": true }
   ],
   "headers": [
     {

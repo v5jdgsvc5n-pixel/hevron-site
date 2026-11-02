@@ -196,7 +196,7 @@ const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','ag
 const mes = (n) => { const d = new Date(now.getFullYear(), now.getMonth() + n, 1); return meses[d.getMonth()] + ' de ' + d.getFullYear(); };
 const construir = a.obj === 'Construir do zero';
 const tiposReforma = ['Reforma completa', 'Reforma parcial (alguns ambientes)', 'Cozinha', 'Banheiro', 'Áreas externas', 'Pisos', 'Pintura e revestimentos', 'Elétrica e hidráulica', 'Eficiência energética', 'Mármore'];
-const tiposConstrucao = ['Casa térrea', 'Sobrado', 'Residência sob medida', 'Ampliação', 'Área de lazer e piscina', 'Imóvel comercial'];
+const tiposConstrucao = ['Casa autoral', 'Projeto exclusivo', 'Residência sob medida', 'Ampliação', 'Área de lazer e piscina', 'Imóvel comercial'];
 const tiposAmbos = ['Reforma completa', 'Reforma parcial (alguns ambientes)', 'Construção de casa', 'Ampliação', 'Área de lazer e piscina', 'Ainda estou decidindo'];
 return [
 { id: 'obj', kind: 'choice', title: 'O que você quer fazer?', info: 'Escolha a opção que mais combina com o seu projeto.', options: ['Reformar um imóvel', 'Construir do zero', 'Ainda não sei'] },
