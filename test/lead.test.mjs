@@ -37,12 +37,12 @@ test('cliente recebe confirmação automática no e-mail', async () => {
   const { calls } = await call(projeto, ENV);
   const conf = calls.find((c) => c.url.includes('resend') && c.body.to[0] === 'maria@exemplo.com');
   assert.ok(conf);
-  assert.equal(conf.body.subject, 'Maria, recebemos o seu pedido');
+  assert.equal(conf.body.subject, 'Maria, o seu projeto chegou até nós');
   assert.equal(conf.body.reply_to, 'contato@hevron.com.br');
-  assert.match(conf.body.html, /Olá, Maria!/);
+  assert.match(conf.body.html, /Olá, Maria\./);
   assert.doesNotMatch(conf.body.html, /Reformar um imóvel/);
   assert.match(conf.body.html, /duas árvores plantadas/);
-  assert.match(conf.body.html, /wa\.me\/5543988712083/);
+  assert.doesNotMatch(conf.body.html, /wa\.me/);
 });
 
 test('sem e-mail não há confirmação', async () => {

@@ -123,7 +123,6 @@ async function sendEmail(lead) {
   return true;
 }
 
-const WHATSAPP = '5543988712083';
 const ARVORES_IMG = 'https://hevron.com.br/img/email-arvores.jpg';
 
 function primeiroNome(nome) {
@@ -135,28 +134,24 @@ function primeiroNome(nome) {
 function confirmacaoHtml(lead) {
   const nome = escapeHtml(primeiroNome(lead.nome));
   const projeto = lead.tipo === 'projeto';
+  const P = 'margin:0 0 16px';
   const corpo = projeto
-    ? `<p>Recebemos o seu pedido e ficamos felizes com a confiança. Um coordenador da Hevron vai analisar o seu projeto e entrar em contato em breve pelo WhatsApp ou telefone que você informou.</p>
-<p><strong>Como trabalhamos:</strong></p>
-<ul style="padding-left:20px;margin:0">
-<li style="margin-bottom:6px">Orçamento detalhado por etapa, antes de começar.</li>
-<li style="margin-bottom:6px">Fotos e relatórios de cada etapa da obra.</li>
-<li style="margin-bottom:6px">Projeto, obra e acabamento com um só time.</li>
-</ul>`
-    : `<p>Recebemos o seu cadastro na rede de profissionais da Hevron. Nossa equipe vai avaliar as informações e entrar em contato pelo WhatsApp ou telefone que você informou.</p>`;
-  return `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#1C1B19;max-width:560px;margin:0 auto">
-<p style="font-family:Georgia,serif;font-size:26px;margin:0 0 24px"><span style="color:#A84E28">H</span>evron</p>
-<p>Olá, ${nome}!</p>
+    ? `<p style="${P}">Obrigado por confiar à Hevron o primeiro passo do seu projeto.</p>
+<p style="${P}">Toda obra começa com uma boa conversa. Em breve, um coordenador da nossa equipe vai entrar em contato para entender o que você imagina e apresentar os próximos passos.</p>
+<p style="${P}">Desde o início, você terá clareza sobre o que será feito, quanto custa e quando cada fase acontece. E vai acompanhar tudo de perto, com registros de cada etapa, até a entrega das chaves.</p>`
+    : `<p style="${P}">Obrigado pelo interesse em fazer parte da rede de profissionais da Hevron.</p>
+<p style="${P}">Recebemos o seu cadastro. Nossa equipe vai conhecer o seu trabalho e entrar em contato em breve para conversar sobre as próximas obras na sua região.</p>`;
+  return `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.65;color:#1C1B19;max-width:560px;margin:0 auto">
+<p style="font-family:Georgia,serif;font-size:26px;margin:0 0 32px"><span style="color:#A84E28">H</span>evron</p>
+<p style="${P}">Olá, ${nome}.</p>
 ${corpo}
-<div style="background:#F2F0E5;border-radius:8px;margin:28px 0 0;padding:20px 20px 24px;text-align:center">
+<div style="background:#F2F0E5;border-radius:8px;margin:32px 0 0;padding:20px 20px 24px;text-align:center">
 <img src="${ARVORES_IMG}" width="480" alt="Mudas crescendo até virar uma árvore" style="display:block;width:100%;max-width:480px;height:auto;margin:0 auto">
 <p style="font-family:Georgia,serif;font-size:22px;line-height:1.3;margin:16px 0 8px">Cada obra entregue, duas árvores plantadas.</p>
-<p style="margin:0;color:#5A564F">Ao final da sua obra, a Hevron planta duas árvores. Construir também é cuidar do planeta.</p>
+<p style="margin:0;color:#5A564F">É o nosso jeito de devolver à cidade um pouco do que construímos nela.</p>
 </div>
-<p style="margin-top:28px">Se quiser adiantar a conversa, é só nos chamar:</p>
-<p><a href="https://wa.me/${WHATSAPP}" style="display:inline-block;background:#A84E28;color:#FFFFFF;text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:bold">Falar no WhatsApp</a></p>
-<p style="margin-top:28px">Até breve,<br>Equipe Hevron<br><span style="color:#5A564F">(43) 98871-2083 · hevron.com.br</span></p>
-<p style="color:#8A8377;font-size:12px;margin-top:28px">Você recebeu este e-mail porque preencheu um formulário em hevron.com.br. Se não foi você, pode ignorar esta mensagem.</p>
+<p style="margin:32px 0 0">Até breve,<br>Equipe Hevron<br><span style="color:#5A564F">hevron.com.br</span></p>
+<p style="color:#8A8377;font-size:12px;margin-top:32px">Você recebeu este e-mail porque preencheu um formulário em hevron.com.br. Se não foi você, pode ignorar esta mensagem.</p>
 </div>`;
 }
 
@@ -172,8 +167,8 @@ async function sendConfirmation(lead) {
       to: [lead.email],
       reply_to: equipe[0] || undefined,
       subject: lead.tipo === 'projeto'
-        ? `${primeiroNome(lead.nome)}, recebemos o seu pedido`
-        : `${primeiroNome(lead.nome)}, recebemos o seu cadastro`,
+        ? `${primeiroNome(lead.nome)}, o seu projeto chegou até nós`
+        : `${primeiroNome(lead.nome)}, recebemos o seu cadastro na rede Hevron`,
       html: confirmacaoHtml(lead),
     }),
   });
