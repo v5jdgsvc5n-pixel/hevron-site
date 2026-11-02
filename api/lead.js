@@ -138,7 +138,7 @@ function confirmacaoHtml(lead) {
   const corpo = projeto
     ? `<p style="${P}">Obrigado por confiar à Hevron o primeiro passo do seu projeto.</p>
 <p style="${P}">Toda obra começa com uma boa conversa. Em breve, um coordenador da nossa equipe vai entrar em contato para entender o que você imagina e apresentar os próximos passos.</p>
-<p style="${P}">Desde o início, você terá clareza sobre o que será feito, quanto custa e quando cada fase acontece. E vai acompanhar tudo de perto, com registros de cada etapa, até a entrega das chaves.</p>`
+<p style="${P}">Desde o início, você terá clareza sobre o que será feito, quanto custa e quando cada fase acontece. E vai acompanhar tudo de perto, com registros de cada etapa, até a conclusão da obra.</p>`
     : `<p style="${P}">Obrigado pelo interesse em fazer parte da rede de profissionais da Hevron.</p>
 <p style="${P}">Recebemos o seu cadastro. Nossa equipe vai conhecer o seu trabalho e entrar em contato em breve para conversar sobre as próximas obras na sua região.</p>`;
   return `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.65;color:#1C1B19;max-width:560px;margin:0 auto">
