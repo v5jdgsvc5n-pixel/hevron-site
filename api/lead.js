@@ -124,6 +124,14 @@ async function sendEmail(lead) {
 }
 
 const ARVORES_IMG = 'https://hevron.com.br/img/email-arvores.jpg';
+const LOGO_IMG = 'https://hevron.com.br/img/email-logo.png';
+
+// Remetente da confirmação: só "Hevron", com o mesmo endereço configurado.
+function remetenteHevron() {
+  const from = process.env.LEAD_EMAIL_FROM || 'site@hevron.com.br';
+  const m = from.match(/<([^>]+)>/);
+  return `Hevron <${(m ? m[1] : from).trim()}>`;
+}
 
 function primeiroNome(nome) {
   const n = nome.split(/\s+/)[0] || '';
@@ -142,7 +150,7 @@ function confirmacaoHtml(lead) {
     : `<p style="${P}">Obrigado pelo interesse em fazer parte da rede de profissionais da Hevron.</p>
 <p style="${P}">Recebemos o seu cadastro. Nossa equipe vai conhecer o seu trabalho e entrar em contato em breve para conversar sobre as próximas obras na sua região.</p>`;
   return `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.65;color:#1C1B19;max-width:560px;margin:0 auto">
-<p style="font-family:Georgia,serif;font-size:26px;margin:0 0 32px"><span style="color:#A84E28">H</span>evron</p>
+<p style="margin:0 0 32px"><img src="${LOGO_IMG}" width="180" alt="Hevron" style="display:block;width:180px;height:auto;border:0"></p>
 <p style="${P}">Olá, ${nome}.</p>
 ${corpo}
 <div style="background:#F2F0E5;border-radius:8px;margin:32px 0 0;padding:20px 20px 24px;text-align:center">
@@ -163,7 +171,7 @@ async function sendConfirmation(lead) {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: process.env.LEAD_EMAIL_FROM || 'Site Hevron <site@hevron.com.br>',
+      from: remetenteHevron(),
       to: [lead.email],
       reply_to: equipe[0] || undefined,
       subject: lead.tipo === 'projeto'
