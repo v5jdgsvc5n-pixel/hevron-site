@@ -6,6 +6,9 @@
 //   RESEND_API_KEY                           → envio do e-mail de aviso
 //   LEAD_EMAIL_TO                            → quem recebe o aviso (ex.: contato@hevron.com.br)
 //   LEAD_EMAIL_FROM                          → remetente (ex.: Site Hevron <site@hevron.com.br>)
+//
+// Quem preenche o formulário com e-mail também recebe uma confirmação automática
+// (precisa do domínio do remetente verificado no Resend).
 
 const TIPOS = { projeto: 'Novo pedido de orçamento', parceiro: 'Novo cadastro de parceiro' };
 
@@ -120,6 +123,69 @@ async function sendEmail(lead) {
   return true;
 }
 
+const WHATSAPP = '5543988712083';
+
+function primeiroNome(nome) {
+  const n = nome.split(/\s+/)[0] || '';
+  return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
+}
+
+// E-mail automático para quem preencheu o formulário.
+function confirmacaoHtml(lead) {
+  const nome = escapeHtml(primeiroNome(lead.nome));
+  const projeto = lead.tipo === 'projeto';
+  const respostas = projeto ? Object.entries(lead.dados.respostas || {}).filter(([, v]) => v) : [];
+  const resumo = respostas.length
+    ? `<p style="margin:28px 0 8px;font-weight:bold">O que você nos contou</p>
+<table cellpadding="6" style="border-collapse:collapse;width:100%;background:#F6F3EE">
+${respostas.map(([k, v]) => `<tr><td style="color:#5A564F;vertical-align:top;width:45%">${escapeHtml(k)}</td><td>${escapeHtml(v)}</td></tr>`).join('\n')}
+</table>`
+    : '';
+  const corpo = projeto
+    ? `<p>Recebemos o seu pedido e ficamos felizes com a confiança. Um coordenador da Hevron vai analisar o que você nos contou e entrar em contato em breve pelo WhatsApp ou telefone que você informou.</p>
+<p><strong>Como trabalhamos:</strong></p>
+<ul style="padding-left:20px;margin:0">
+<li style="margin-bottom:6px">Orçamento detalhado por etapa, antes de começar.</li>
+<li style="margin-bottom:6px">Fotos e relatórios de cada etapa da obra.</li>
+<li style="margin-bottom:6px">Projeto, obra e acabamento com um só time.</li>
+</ul>`
+    : `<p>Recebemos o seu cadastro na rede de profissionais da Hevron. Nossa equipe vai avaliar as informações e entrar em contato pelo WhatsApp ou telefone que você informou.</p>`;
+  return `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#1C1B19;max-width:560px;margin:0 auto">
+<p style="font-family:Georgia,serif;font-size:26px;margin:0 0 24px"><span style="color:#A84E28">H</span>evron</p>
+<p>Olá, ${nome}!</p>
+${corpo}
+${resumo}
+<p style="margin-top:28px">Se quiser adiantar a conversa, é só nos chamar:</p>
+<p><a href="https://wa.me/${WHATSAPP}" style="display:inline-block;background:#A84E28;color:#FFFFFF;text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:bold">Falar no WhatsApp</a></p>
+<p style="margin-top:28px">Até breve,<br>Equipe Hevron<br><span style="color:#5A564F">(43) 98871-2083 · hevron.com.br</span></p>
+<p style="color:#8A8377;font-size:12px;margin-top:28px">Você recebeu este e-mail porque preencheu um formulário em hevron.com.br. Se não foi você, pode ignorar esta mensagem.</p>
+</div>`;
+}
+
+async function sendConfirmation(lead) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key || !lead.email) return false;
+  const equipe = (process.env.LEAD_EMAIL_TO || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: process.env.LEAD_EMAIL_FROM || 'Site Hevron <site@hevron.com.br>',
+      to: [lead.email],
+      reply_to: equipe[0] || undefined,
+      subject: lead.tipo === 'projeto'
+        ? `${primeiroNome(lead.nome)}, recebemos o seu pedido`
+        : `${primeiroNome(lead.nome)}, recebemos o seu cadastro`,
+      html: confirmacaoHtml(lead),
+    }),
+  });
+  if (!r.ok) {
+    console.error('Resend (confirmação)', r.status, await r.text());
+    return false;
+  }
+  return true;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -141,6 +207,7 @@ export default async function handler(req, res) {
   const [saved, mailed] = await Promise.all([
     saveToSupabase(lead).catch((e) => { console.error(e); return false; }),
     sendEmail(lead).catch((e) => { console.error(e); return false; }),
+    sendConfirmation(lead).catch((e) => { console.error(e); return false; }),
   ]);
   if (!saved && !mailed) return res.status(500).json({ ok: false, erro: 'Não foi possível registrar o pedido.' });
   return res.status(200).json({ ok: true });

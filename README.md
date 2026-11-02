@@ -9,7 +9,7 @@ Site de reforma e construção da Hevron, publicado em https://hevron.com.br.
 - `scripts/build.mjs`: gera o site final em `dist/` (HTML pronto para o Google, `sitemap.xml` e `robots.txt`).
 - `scripts/legal-content.py`: gera as páginas de Política de privacidade e Termos de uso.
 - `public/`: fotos (`img/`) e ícone do site.
-- `api/lead.js`: recebe os formulários "Começar meu projeto" e "Seja parceiro", guarda no Supabase e envia um e-mail de aviso.
+- `api/lead.js`: recebe os formulários "Começar meu projeto" e "Seja parceiro", guarda no Supabase e envia um e-mail de aviso para a equipe. Quem preencheu com e-mail recebe uma confirmação automática (o domínio do remetente precisa estar verificado no Resend).
 - `supabase/schema.sql`: cria a tabela `leads` no Supabase.
 
 ## Comandos
