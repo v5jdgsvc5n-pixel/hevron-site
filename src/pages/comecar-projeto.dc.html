@@ -209,7 +209,7 @@ construir
 { id: 'situacao', kind: 'choice', title: 'Qual é a sua relação com o imóvel?', info: '', options: ['Sou o proprietário', 'Estou comprando', 'Sou inquilino', 'Cuido da obra para outra pessoa ou empresa'] },
 { id: 'planta', kind: 'choice', title: 'Você já tem um projeto ou planta?', info: 'Se ainda não tiver, tudo bem: a Hevron também cuida do projeto.', options: ['Sim, tenho o projeto completo', 'Tenho só algumas ideias e referências', 'Não, preciso de um projeto'] },
 { id: 'quando', kind: 'choice', title: 'Quando você quer começar a obra?', info: 'A data de início pode influenciar o custo e a disponibilidade das equipes.', options: ['Antes de ' + mes(3), 'Entre ' + mes(3) + ' e ' + mes(6), 'Depois de ' + mes(6), 'Ainda não tenho data'] },
-{ id: 'orcamento', kind: 'choice', title: 'Quanto você pretende investir?', info: 'Considere mão de obra e materiais. O coordenador ajuda a ajustar esse valor com você.', options: ['Até R$ 30 mil', 'De R$ 30 mil a R$ 80 mil', 'De R$ 80 mil a R$ 150 mil', 'De R$ 150 mil a R$ 300 mil', 'De R$ 300 mil a R$ 600 mil', 'Mais de R$ 600 mil', 'Ainda não sei'] },
+{ id: 'orcamento', kind: 'choice', title: 'Quanto você pretende investir?', info: 'Considere mão de obra e materiais. O coordenador ajuda a ajustar esse valor com você.', options: construir ? ['Até R$ 500 mil', 'De R$ 500 mil a R$ 1 milhão', 'De R$ 1 milhão a R$ 2 milhões', 'Mais de R$ 2 milhões', 'Ainda não sei'] : ['Até R$ 30 mil', 'De R$ 30 mil a R$ 80 mil', 'De R$ 80 mil a R$ 150 mil', 'De R$ 150 mil a R$ 300 mil', 'De R$ 300 mil a R$ 600 mil', 'Mais de R$ 600 mil', 'Ainda não sei'] },
 { id: 'descricao', kind: 'text', title: 'Quer contar mais detalhes sobre o projeto?', info: 'Por favor, não coloque seus dados de contato aqui. Eles serão pedidos na próxima etapa.' }
 ];
 }
@@ -222,7 +222,7 @@ return el ? String(el.value || '') : String(fallback || '');
 answer(id, val) {
 const st = this.state || {};
 const a = Object.assign({}, st.ans || {});
-if (id === 'obj' && a.obj !== val) { delete a.tipo; delete a.imovel; }
+if (id === 'obj' && a.obj !== val) { delete a.tipo; delete a.imovel; delete a.orcamento; }
 a[id] = val;
 const qs = this.questions(a);
 let next = qs.findIndex((q) => !(q.id in a));
