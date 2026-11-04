@@ -202,16 +202,13 @@ return [
 { id: 'obj', kind: 'choice', title: 'O que você quer fazer?', info: 'Escolha a opção que mais combina com o seu projeto.', options: ['Reformar um imóvel', 'Construir do zero', 'Ainda não sei'] },
 { id: 'cep', kind: 'cep', title: 'Qual é o CEP da obra?', info: 'O CEP nos ajuda a estimar o valor da obra e a escolher profissionais perto de você.' },
 { id: 'tipo', kind: 'choice', title: 'Que tipo de projeto você quer fazer?', info: 'Selecione a opção que melhor descreve o seu projeto.', options: construir ? tiposConstrucao : (a.obj === 'Reformar um imóvel' ? tiposReforma : tiposAmbos) },
-construir
-? { id: 'imovel', kind: 'choice', title: 'Você já tem o terreno?', info: '', options: ['Sim, já tenho o terreno', 'Estou negociando um terreno', 'Ainda não tenho terreno'] }
-: { id: 'imovel', kind: 'choice', title: 'Qual é o imóvel da obra?', info: '', options: ['Casa', 'Apartamento', 'Sobrado', 'Imóvel comercial', 'Outro'] },
+construir ? null : { id: 'imovel', kind: 'choice', title: 'Qual é o imóvel da obra?', info: '', options: ['Casa', 'Apartamento', 'Sobrado', 'Imóvel comercial', 'Outro'] },
 { id: 'area', kind: 'area', title: construir ? 'Quantos metros quadrados você quer construir?' : 'Qual é a área da reforma?', info: construir ? 'Uma estimativa já ajuda. Se não souber, o coordenador calcula com você.' : 'Informe a área total dos ambientes que vão passar pela obra. Um valor aproximado já ajuda.' },
-{ id: 'situacao', kind: 'choice', title: 'Qual é a sua relação com o imóvel?', info: '', options: ['Sou o proprietário', 'Estou comprando', 'Sou inquilino', 'Cuido da obra para outra pessoa ou empresa'] },
 { id: 'planta', kind: 'choice', title: 'Você já tem um projeto ou planta?', info: 'Se ainda não tiver, tudo bem: a Hevron também cuida do projeto.', options: ['Sim, tenho o projeto completo', 'Tenho só algumas ideias e referências', 'Não, preciso de um projeto'] },
 { id: 'quando', kind: 'choice', title: 'Quando você quer começar a obra?', info: 'A data de início pode influenciar o custo e a disponibilidade das equipes.', options: ['Antes de ' + mes(3), 'Entre ' + mes(3) + ' e ' + mes(6), 'Depois de ' + mes(6), 'Ainda não tenho data'] },
 { id: 'orcamento', kind: 'choice', title: 'Quanto você pretende investir?', info: 'Considere mão de obra e materiais. O coordenador ajuda a ajustar esse valor com você.', options: construir ? ['Até R$ 500 mil', 'De R$ 500 mil a R$ 1 milhão', 'De R$ 1 milhão a R$ 2 milhões', 'Mais de R$ 2 milhões', 'Ainda não sei'] : ['Até R$ 30 mil', 'De R$ 30 mil a R$ 80 mil', 'De R$ 80 mil a R$ 150 mil', 'De R$ 150 mil a R$ 300 mil', 'De R$ 300 mil a R$ 600 mil', 'Mais de R$ 600 mil', 'Ainda não sei'] },
 { id: 'descricao', kind: 'text', title: 'Quer contar mais detalhes sobre o projeto?', info: 'Por favor, não coloque seus dados de contato aqui. Eles serão pedidos na próxima etapa.' }
-];
+].filter(Boolean);
 }
 field(e, sel, fallback) {
 const t = e && (e.currentTarget || e.target);
