@@ -88,7 +88,8 @@ renderVals() {{ return {{}}; }}
 </html>
 '''
 
-atual = p('<strong>Última atualização:</strong> 27 de outubro de 2026.')
+atual = p('<strong>Última atualização:</strong> 6 de novembro de 2026.')
+atual_termos = p('<strong>Última atualização:</strong> 27 de outubro de 2026.')
 EMAIL = '<a href="mailto:contato@hevron.com.br">contato@hevron.com.br</a>'
 WHATS = '<a href="https://wa.me/5543988712083" target="_blank" rel="noopener">(43) 98871-2083</a>'
 
@@ -134,7 +135,7 @@ priv = [
       '<strong>Vercel</strong> (Estados Unidos): hospedagem do site e registros de acesso.',
       '<strong>Supabase</strong> (servidores em São Paulo, Brasil): armazenamento dos pedidos enviados pelos formulários.',
       '<strong>Resend</strong> (Estados Unidos): envio do e-mail interno que nos avisa de cada novo pedido.',
-      '<strong>Zoho</strong>: caixa de e-mail onde recebemos esses avisos.',
+      '<strong>Google Workspace</strong> (Gmail, Google, Estados Unidos): caixa de e-mail onde recebemos esses avisos e as suas mensagens.',
       '<strong>Google Analytics e Google Ads</strong> (Google, Estados Unidos): medição de audiência e dos anúncios, somente com o seu consentimento.',
       '<strong>Meta</strong> (Facebook e Instagram, Estados Unidos): medição dos anúncios pelo Pixel da Meta, somente com o seu consentimento.',
     ]),
@@ -240,6 +241,6 @@ termos = [
     priv))
 (root / 'termos-de-uso.dc.html').write_text(page(
     'termos-de-uso', 'Termos de uso', 'O que tem nestes termos?',
-    [atual, p('Estes termos explicam as regras para usar o site hevron.com.br. Leia com atenção antes de enviar um formulário.')],
+    [atual_termos, p('Estes termos explicam as regras para usar o site hevron.com.br. Leia com atenção antes de enviar um formulário.')],
     termos))
 print('ok')
